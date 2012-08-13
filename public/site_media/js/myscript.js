@@ -7,13 +7,9 @@
 
 myJS = function ()
 {
-    var myTable = $('#positions-table');
-
-    alert($("#positions-table tbody tr").length);
-
-    $("#positions-table tbody tr").click(function (e)
+    $("#positions-table tbody tr").live('click', function (e)
     {
-        alert('selected!');
+        var myTable = $('#positions-table');
 
         if ($(this).hasClass('row_selected'))
         {
@@ -21,7 +17,7 @@ myJS = function ()
         }
         else
         {
-            myTable.$('tr.row_selected').removeClass('row_selected');
+            myTable.find('.row_selected').removeClass('row_selected');
             $(this).addClass('row_selected');
         }
     });

@@ -262,5 +262,5 @@ tr.odd:hover td.sorting_3 {
 /*select*/
 
 .row_selected {
-    background-color: red;
+    background-color: #b0bed9 !important;
 }
