@@ -31,15 +31,11 @@ table.dataTable td.dataTables_empty {
 	text-align: center;
 }
 
-table.dataTable tr.odd { background-color: #E2E4FF; }
+table.dataTable tr.odd { background-color: #d3d3d3; }
 table.dataTable tr.even { background-color: white; }
 
-table.dataTable tr.odd td.sorting_1 { background-color: #D3D6FF; }
-table.dataTable tr.odd td.sorting_2 { background-color: #DADCFF; }
-table.dataTable tr.odd td.sorting_3 { background-color: #E0E2FF; }
-table.dataTable tr.even td.sorting_1 { background-color: #EAEBFF; }
-table.dataTable tr.even td.sorting_2 { background-color: #F2F3FF; }
-table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
+table.dataTable tr.odd td.sorting_1 { background-color: #808080; }
+table.dataTable tr.even td.sorting_1 { background-color: #d3d3d3; }
 
 
 /*
@@ -220,47 +216,25 @@ table.dataTable th:active {
 
 /*hover*/
 tbody tr.even:hover, tbody tr.even td.highlighted {
-    background-color: #ECFFB3;
+    background-color: #b0c4de;
 }
 
 tbody tr.odd:hover, tbody tr.odd td.highlighted {
-    background-color: #E6FF99;
-}
-
-tr.even:hover {
-    background-color: #ECFFB3;
-}
-
-tr.even:hover td.sorting_1 {
-    background-color: #DDFF75;
-}
-
-tr.even:hover td.sorting_2 {
-    background-color: #E7FF9E;
-}
-
-tr.even:hover td.sorting_3 {
-    background-color: #E2FF89;
-}
-
-tr.odd:hover {
-    background-color: #E6FF99;
-}
-
-tr.odd:hover td.sorting_1 {
-    background-color: #D6FF5C;
-}
-
-tr.odd:hover td.sorting_2 {
-    background-color: #E0FF84;
-}
-
-tr.odd:hover td.sorting_3 {
-    background-color: #DBFF70;
+    background-color: #b0c4de;
 }
 
 /*select*/
 
 .row_selected {
-    background-color: #b0bed9 !important;
+    background-color: #f08080 !important;
+}
+
+/*toolbar*/
+.toolbar {
+    float: left;
+}
+
+/*buttons*/
+.myButton {
+    margin-right: 10px;
 }
