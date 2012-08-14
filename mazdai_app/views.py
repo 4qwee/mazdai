@@ -2,13 +2,13 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from mazdai_app.models import Position
+import datetime
+from mazdai_app.models import Position, SaleEntry
 from mazdai_app.utils import get_datatables_records
 from django import forms
 
 def default(request):
-    form = SaleForm()
-    return render_to_response('default.html', locals(), context_instance = RequestContext(request))
+    return render_to_response('default.html', {'form':SaleForm()}, RequestContext(request))
 
 def get_positions_list(request):
     querySet = Position.objects.all()
@@ -31,4 +31,9 @@ def sales(request):
             position.quantity -= form.cleaned_data['count']
             position.save()
 
-    return HttpResponseRedirect('/')
+            entry = SaleEntry(position=position, date=datetime.datetime.now())
+            entry.save()
+
+        return HttpResponseRedirect('/')
+    else:
+        return render_to_response('sales_list.html', {'entries': SaleEntry.objects.all()})

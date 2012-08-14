@@ -1,0 +1,17 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Продажи</title>
+</head>
+<body>
+<h1>Продажи</h1>
+{#{% for entry, position in entries2 %}#}
+{% for entry in entries %}
+    <div>
+    {{ entry.date }}
+    {{ entry.position.name }}
+    </div>
+{% endfor %}
+</body>
+</html>
