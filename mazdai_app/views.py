@@ -12,8 +12,8 @@ def default(request):
 
 def get_positions_list(request):
     querySet = Position.objects.all()
-    columnIndexNameMap = { 0: 'number', 1: 'name', 2: 'quantity', 3: 'description'}
-    searchableColumns = ['number', 'name', 'description']
+    columnIndexNameMap = { 0: 'id', 1: 'name', 2: 'quantity', 3: 'description'}
+    searchableColumns = ['id', 'name', 'description']
     jsonTemplatePath = 'json_positions.txt'
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
@@ -27,7 +27,7 @@ def sales(request):
         form = SaleForm(request.POST)
 
         if form.is_valid():
-            position = Position.objects.get(number=form.cleaned_data['number'])
+            position = Position.objects.get(id=form.cleaned_data['number'])
             position.quantity -= form.cleaned_data['count']
             position.save()
 

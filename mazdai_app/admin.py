@@ -4,8 +4,8 @@ from django.contrib import admin
 from mazdai_app.models import Position
 
 class PositionAdmin(admin.ModelAdmin):
-    list_display = ('number', 'name')
+    list_display = ('id', 'name')
     list_editable = ('name',)
-    ordering = ['number']
+    ordering = ['id']
 
 admin.site.register(Position, PositionAdmin)

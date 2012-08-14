@@ -6,7 +6,7 @@
     {% for position in querySet %}
     [
     	
-    	"{{position.number}}",
+    	"{{position.id}}",
     	"{{position.name}}",
 		"{{position.quantity}}",
     	"{{position.description}}"
