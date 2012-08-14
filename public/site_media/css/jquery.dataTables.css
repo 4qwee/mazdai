@@ -232,6 +232,7 @@ tbody tr.odd:hover, tbody tr.odd td.highlighted {
 /*toolbar*/
 .toolbar {
     float: left;
+    height: 27pt;
 }
 
 /*buttons*/

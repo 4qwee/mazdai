@@ -16,6 +16,8 @@ myJS = function ()
         if ($(this).hasClass('row_selected'))
         {
             $(this).removeClass('row_selected');
+
+            toolbar.empty();
         }
         else
         {
@@ -25,6 +27,10 @@ myJS = function ()
             toolbar.empty();
 
             $sale = $('<input/>').attr('type', 'button').val('Продажа').addClass('myButton');
+            $sale.click(function(e)
+            {
+                $('#salesPopup').dialog({modal:true});
+            });
             toolbar.append($sale);
 
             $expense = $('<input/>').attr('type', 'button').val('Расход').addClass('myButton');

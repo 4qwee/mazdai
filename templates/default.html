@@ -4,7 +4,10 @@
 <head>
     <title></title>
     <link rel="Stylesheet" href="/site_media/css/jquery.dataTables.css" type="text/css"/>
+    <link rel="Stylesheet" href="/site_media/css/jquery-ui.min.css" type="text/css"/>
     <script type="text/javascript" src="/site_media/js/jquery.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery.ui.dialog.min.js"></script>
     <script type="text/javascript" src="/site_media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/site_media/js/myscript.js"></script>
     <script type="text/javascript">
@@ -46,5 +49,9 @@
 
     </tbody>
 </table>
+<div id='salesPopup' style="display: none;"><form action="/" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form></div>
 </body>
 </html>
