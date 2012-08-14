@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^ajax/get-positions-list/$', 'mazdai_app.views.get_positions_list', name = 'get_positions_list'),
+    url(r'^sales/$', 'mazdai_app.views.sales'),
     url(r'^$', 'mazdai_app.views.default'),
 )

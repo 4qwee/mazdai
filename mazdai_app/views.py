@@ -1,4 +1,5 @@
 # coding=utf-8
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from mazdai_app.models import Position
@@ -18,5 +19,16 @@ def get_positions_list(request):
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
 class SaleForm(forms.Form):
-    number = forms.IntegerField(max_value=99999, label='Номер')
+    number = forms.IntegerField(max_value=99999)
     count = forms.IntegerField(max_value=999, label='Количество')
+
+def sales(request):
+    if request.method == 'POST':
+        form = SaleForm(request.POST)
+
+        if form.is_valid():
+            position = Position.objects.get(number=form.cleaned_data['number'])
+            position.quantity -= form.cleaned_data['count']
+            position.save()
+
+    return HttpResponseRedirect('/')

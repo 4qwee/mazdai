@@ -11,25 +11,29 @@ myJS = function ()
     {
         var myTable = $('#positions-table');
         var toolbar = $("div.toolbar");
+        var $this = $(this);
 
-
-        if ($(this).hasClass('row_selected'))
+        if ($this.hasClass('row_selected'))
         {
-            $(this).removeClass('row_selected');
+            $this.removeClass('row_selected');
 
             toolbar.empty();
         }
         else
         {
             myTable.find('tr.row_selected').removeClass('row_selected');
-            $(this).addClass('row_selected');
+            $this.addClass('row_selected');
 
             toolbar.empty();
 
             $sale = $('<input/>').attr('type', 'button').val('Продажа').addClass('myButton');
             $sale.click(function(e)
             {
-                $('#salesPopup').dialog({modal:true});
+                var $popup = $('#salesPopup');
+                $popup.find('p').first().hide();
+                var number = $this.find('td').first().html();
+                $popup.find('#id_number').val(number);
+                $popup.dialog({modal:true});
             });
             toolbar.append($sale);
 
