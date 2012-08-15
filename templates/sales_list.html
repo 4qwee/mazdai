@@ -3,15 +3,46 @@
 <html>
 <head>
     <title>Продажи</title>
+    <link rel="Stylesheet" href="/site_media/css/jquery-ui.min.css" type="text/css"/>
+    <link rel="Stylesheet" href="/site_media/css/jquery.dataTables.css" type="text/css"/>
+    <script type="text/javascript" src="/site_media/js/jquery.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#sales-table').dataTable({
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "bServerSide": true,
+                "sAjaxSource": "{% url get_sales_list %}",
+                "bJQueryUI": true,
+                "sDom": '<"toolbar">frtip',
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [ 1 ] },
+                    { 'bSortable': false, 'aTargets': [ 2 ] }
+                ]
+            });
+        } );
+    </script>
 </head>
 <body>
-<h1>Продажи</h1>
-{#{% for entry, position in entries2 %}#}
-{% for entry in entries %}
-    <div>
-    {{ entry.date }}
-    {{ entry.position.name }}
-    </div>
-{% endfor %}
+<table id="sales-table" width="100%">
+    <thead>
+    <tr>
+        <th>
+            Дата
+        </th>
+        <th>
+            Имя
+        </th>
+        <th>
+            Количество
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
 </body>
 </html>

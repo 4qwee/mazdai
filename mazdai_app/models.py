@@ -12,3 +12,4 @@ class SaleEntry(models.Model):
 
     position = models.ForeignKey(Position)
     date = models.DateTimeField(verbose_name='Дата')
+    quantity = models.IntegerField(verbose_name='Количество', max_length=3)

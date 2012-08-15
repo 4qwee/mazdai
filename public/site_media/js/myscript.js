@@ -13,7 +13,7 @@ myJS = function ()
         var toolbar = $("div.toolbar");
         var $this = $(this);
 
-        if ($this.find('.dataTables_empty'))
+        if ($this.find('td').first().hasClass('dataTables_empty'))
             return;
 
         if ($this.hasClass('row_selected'))

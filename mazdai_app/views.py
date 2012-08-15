@@ -18,6 +18,14 @@ def get_positions_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
+def get_sales_list(request):
+    querySet = SaleEntry.objects.all()
+    columnIndexNameMap = { 0: 'date', 1: 'position.name', 2: 'quantity'}
+    searchableColumns = ['position.name']
+    jsonTemplatePath = 'json_sales.txt'
+
+    return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
+
 class SaleForm(forms.Form):
     number = forms.IntegerField(max_value=99999)
     count = forms.IntegerField(max_value=999, label='Количество')
@@ -28,10 +36,11 @@ def sales(request):
 
         if form.is_valid():
             position = Position.objects.get(id=form.cleaned_data['number'])
-            position.quantity -= form.cleaned_data['count']
+            count_ = form.cleaned_data['count']
+            position.quantity -= count_
             position.save()
 
-            entry = SaleEntry(position=position, date=datetime.datetime.now())
+            entry = SaleEntry(position=position, date=datetime.datetime.now(), quantity=count_)
             entry.save()
 
         return HttpResponseRedirect('/')
