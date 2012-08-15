@@ -13,6 +13,9 @@ myJS = function ()
         var toolbar = $("div.toolbar");
         var $this = $(this);
 
+        if ($this.find('.dataTables_empty'))
+            return;
+
         if ($this.hasClass('row_selected'))
         {
             $this.removeClass('row_selected');
