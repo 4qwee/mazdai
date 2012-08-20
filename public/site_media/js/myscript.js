@@ -48,6 +48,11 @@ myJS = function ()
 
             $order = $('<input/>').attr('type', 'button').val('Заказ').addClass('myButton');
             toolbar.append($order);
+
+            $(toolbar).buttonset();
         }
     });
+
+    var $sales_link = $('#bottom_links');
+    $sales_link.buttonset();
 };
