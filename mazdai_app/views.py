@@ -3,17 +3,17 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import datetime
-from mazdai_app.models import Position, SaleEntry
+from mazdai_app.models import *
 from mazdai_app.utils import get_datatables_records
 from django import forms
 
 def default(request):
-    return render_to_response('default.html', {'form':SaleForm()}, RequestContext(request))
+    return render_to_response('default.html', {'form':SaleForm(), 'markets':Market.objects.all().order_by('name')}, RequestContext(request))
 
 def get_positions_list(request):
     querySet = Position.objects.all()
-    columnIndexNameMap = { 0: 'id', 1: 'name', 2: 'quantity', 3: 'description'}
-    searchableColumns = ['id', 'name', 'description']
+    columnIndexNameMap = { 0: 'id', 1: 'name', 2: 'description'}#not all columns
+    searchableColumns = ['name', 'description']
     jsonTemplatePath = 'json_positions.txt'
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)

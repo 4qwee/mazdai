@@ -8,8 +8,13 @@
     	
     	"{{position.id}}",
     	"{{position.name}}",
-		"{{position.quantity}}",
-    	"{{position.description}}"
+    	"{{position.description}}",
+    	{% for quantity in position.quantities %}
+    	    "{{ quantity }}"
+    	    {% if not forloop.last %}
+            ,
+            {% endif %}
+    	{% endfor %}
 	]
     {% if not forloop.last %}
     ,

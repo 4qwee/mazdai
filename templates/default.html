@@ -36,12 +36,14 @@
         <th>
             Имя
         </th>
-        <th width="100px">
-            Количество
-        </th>
         <th>
             Описание
         </th>
+        {% for market in markets %}
+            <th width='100px'>
+                {{ market.name }}
+            </th>
+        {% endfor %}
     </tr>
     </thead>
     <tbody>
