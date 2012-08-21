@@ -8,7 +8,8 @@
 
     	"{{entry.date}}",
     	"{{entry.position.name}}",
-		"{{entry.quantity}}"
+		"{{entry.quantity}}",
+		"{{entry.market.name}}"
 	]
     {% if not forloop.last %}
     ,

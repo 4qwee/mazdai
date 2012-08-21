@@ -35,7 +35,7 @@ myJS = function ()
                 var $popup = $('#salesPopup');
                 $popup.find('p').first().hide();
                 var number = $this.find('td').first().html();
-                $popup.find('#id_number').val(number);
+                $popup.find('#id_position_id').val(number);
                 $popup.dialog({modal:true});
             });
             toolbar.append($sale);

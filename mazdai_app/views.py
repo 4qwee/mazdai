@@ -20,27 +20,36 @@ def get_positions_list(request):
 
 def get_sales_list(request):
     querySet = SaleEntry.objects.all()
-    columnIndexNameMap = { 0: 'date', 1: 'position.name', 2: 'quantity'}
+    columnIndexNameMap = { 0: 'date', 1: 'position.name', 2: 'quantity', 3:'market.name'}
     searchableColumns = ['position.name']
     jsonTemplatePath = 'json_sales.txt'
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
 class SaleForm(forms.Form):
-    number = forms.IntegerField(max_value=99999)
+    position_id = forms.IntegerField(max_value=99999)
+    market_id = forms.IntegerField(max_value=99999, label='Магазин')
     count = forms.IntegerField(max_value=999, label='Количество')
+
 
 def sales(request):
     if request.method == 'POST':
         form = SaleForm(request.POST)
 
         if form.is_valid():
-            position = Position.objects.get(id=form.cleaned_data['number'])
+            position_id_ = form.cleaned_data['position_id']
+            market_id_ = form.cleaned_data['market_id']
             count_ = form.cleaned_data['count']
-            position.quantity -= count_
-            position.save()
 
-            entry = SaleEntry(position=position, date=datetime.datetime.now(), quantity=count_)
+            position = Position.objects.get(id=position_id_)
+            market = Market.objects.get(id=market_id_)
+
+            goods_quantity = GoodsQuantity.objects.get(position=position, market=market)
+            goods_quantity.quantity -= count_
+            goods_quantity.save()
+
+            entry = SaleEntry(position=position, date=datetime.datetime.now(),
+                quantity=count_, market=market)
             entry.save()
 
         return HttpResponseRedirect('/')
