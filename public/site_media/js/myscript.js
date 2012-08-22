@@ -36,7 +36,12 @@ myJS = function ()
                 $popup.find('p').first().hide();
                 var number = $this.find('td').first().html();
                 $popup.find('#id_position_id').val(number);
-                $popup.dialog({modal:true});
+                $popup.dialog({
+                    modal:true,
+                    title:'Продажа',
+                    show:{effect:'puff', duration:100},
+                    hide:{effect:'puff', duration:100}
+                });
             });
             toolbar.append($sale);
 
