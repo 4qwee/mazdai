@@ -8,7 +8,10 @@ from mazdai_app.utils import get_datatables_records
 from django import forms
 
 def default(request):
-    return render_to_response('default.html', {'form':SaleForm(), 'markets':Market.objects.all().order_by('name')}, RequestContext(request))
+    markets = Market.objects.all().order_by('name')
+    non_sortable_columns = ', '.join(map(lambda i: str(i), range(3, markets.count() + 3)))
+
+    return render_to_response('default.html', {'form':SaleForm(), 'markets': markets, 'non_sortable_columns':non_sortable_columns}, RequestContext(request))
 
 def get_positions_list(request):
     querySet = Position.objects.all()
@@ -20,7 +23,7 @@ def get_positions_list(request):
 
 def get_sales_list(request):
     querySet = SaleEntry.objects.all()
-    columnIndexNameMap = { 0: 'date', 1: 'position.name', 2: 'quantity', 3:'market.name'}
+    columnIndexNameMap = { 0: 'date', 1: 'position.name', 2: 'quantity', 3:'market__name'}
     searchableColumns = ['position.name']
     jsonTemplatePath = 'json_sales.txt'
 

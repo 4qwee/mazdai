@@ -19,7 +19,10 @@
                 "bScrollCollapse": true,
                 "bJQueryUI": true,
                 "sDom": '<"toolbar">frtip',
-                "sScrollY": "200px"
+                "sScrollY": "200px",
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [ {{ non_sortable_columns }} ] }
+                ]
             });
 
             myJS();
