@@ -28,8 +28,8 @@ def get_sales_list(request):
 
 class SaleForm(forms.Form):
     position_id = forms.IntegerField(max_value=99999)
-    market_id = forms.IntegerField(max_value=99999, label='Магазин')
-    count = forms.IntegerField(max_value=999, label='Количество')
+    market_id = forms.ChoiceField(label='Магазин', choices=map(lambda market: (market.id, market.name), Market.objects.all()))
+    count = forms.IntegerField(max_value=999, label='Количество', initial=1, widget=forms.TextInput(attrs={'size':'10'}))
 
 
 def sales(request):
