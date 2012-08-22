@@ -23,8 +23,8 @@ def get_positions_list(request):
 
 def get_sales_list(request):
     querySet = SaleEntry.objects.all()
-    columnIndexNameMap = { 0: 'date', 1: 'position.name', 2: 'quantity', 3:'market__name'}
-    searchableColumns = ['position.name']
+    columnIndexNameMap = { 0: 'date', 1: 'position__name', 2: 'quantity', 3:'market__name'}
+    searchableColumns = ['position__name', 'market__name']
     jsonTemplatePath = 'json_sales.txt'
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)

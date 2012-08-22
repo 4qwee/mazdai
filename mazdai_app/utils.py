@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponse
@@ -44,7 +45,7 @@ def get_datatables_records(request, querySet, columnIndexNameMap, searchableColu
     if not 'sSearch' in request.GET or not request.GET['sSearch']:
         customSearch = '' #default value
     else:
-        customSearch = str(request.GET['sSearch'])
+        customSearch = unicode(request.GET['sSearch'])
     if customSearch != '':
         outputQ = None
         first = True
