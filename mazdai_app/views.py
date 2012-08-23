@@ -1,8 +1,9 @@
 # coding=utf-8
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import datetime
+import simplejson
 from mazdai_app.models import *
 from mazdai_app.utils import get_datatables_records
 from django import forms
@@ -54,6 +55,9 @@ def sales(request):
             entry = SaleEntry(position=position, date=datetime.datetime.now(),
                 quantity=count_, market=market)
             entry.save()
+
+            if request.is_ajax():
+                return HttpResponse(simplejson.dumps({'success':'True'}), content_type='application/javascript')
 
         return HttpResponseRedirect('/')
     else:

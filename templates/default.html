@@ -53,10 +53,13 @@
 
     </tbody>
 </table>
-<div id='salesPopup' style="display: none;"><form action="/sales/" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Готово" />
-</form></div>
+<div id='salesPopup' style="display: none;">
+    <form action="/sales/" method="post" id='sales_form'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Готово" />
+    </form>
+</div>
 <br/>
 <br/>
 <div id='bottom_links'><a href='/sales/'>Лист продаж</a></div>
