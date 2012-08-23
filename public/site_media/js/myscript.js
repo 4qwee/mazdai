@@ -10,7 +10,7 @@ myJS = function ()
     $("#positions-table tbody tr").live('click', function (e)
     {
         var myTable = $('#positions-table');
-        var toolbar = $("div.toolbar");
+        var $toolbar = $("div.toolbar");
         var $this = $(this);
 
         var $sales_popup = $('#salesPopup');
@@ -30,34 +30,35 @@ myJS = function ()
         {
             $this.removeClass('row_selected');
 
-            toolbar.empty();
+            $toolbar.empty();
         }
         else
         {
             myTable.find('tr.row_selected').removeClass('row_selected');
             $this.addClass('row_selected');
 
-            toolbar.empty();
+            $toolbar.empty();
 
             $sale = $('<input/>').attr('type', 'button').val('Продажа').addClass('myButton');
             $sale.click(function(e)
             {
                 var number = $this.find('td').first().html();
                 $sales_popup.find('#id_position_id').val(number);
+                $sales_popup.find('.submit_button').removeAttr('disabled');
                 $sales_popup.dialog('open');
             });
-            toolbar.append($sale);
+            $toolbar.append($sale);
 
             $expense = $('<input/>').attr('type', 'button').val('Расход').addClass('myButton');
-            toolbar.append($expense);
+            $toolbar.append($expense);
 
             $hands = $('<input/>').attr('type', 'button').val('На руки').addClass('myButton');
-            toolbar.append($hands);
+            $toolbar.append($hands);
 
             $order = $('<input/>').attr('type', 'button').val('Заказ').addClass('myButton');
-            toolbar.append($order);
+            $toolbar.append($order);
 
-            $(toolbar).buttonset();
+            $toolbar.buttonset();
         }
     });
 
@@ -68,6 +69,10 @@ myJS = function ()
     $sales_form.submit(function(e)
     {
         e.preventDefault();
+        $sales_form.find('.submit_button').attr('disabled', 'disabled');
+        $("div.toolbar").empty();
+        $sales_form.find('.progress_image').show();
+
 //        some info actions
 
         $.ajax({
@@ -77,6 +82,7 @@ myJS = function ()
             dataType:'json',
             success:function(json)
             {
+                $sales_form.find('img.progress_image').hide();
                 $('#salesPopup').dialog('close');
 
                 var $table = $('#positions-table');

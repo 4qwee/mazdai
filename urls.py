@@ -16,6 +16,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^ajax/get-positions-list/$', 'mazdai_app.views.get_positions_list', name = 'get_positions_list'),
     url(r'^ajax/get-sales-list/$', 'mazdai_app.views.get_sales_list', name = 'get_sales_list'),
-    url(r'^sales/$', 'mazdai_app.views.sales'),
+    url(r'^sales/$', 'mazdai_app.views.sales', name='sales'),
     url(r'^$', 'mazdai_app.views.default'),
 )

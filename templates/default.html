@@ -54,10 +54,14 @@
     </tbody>
 </table>
 <div id='salesPopup' style="display: none;">
-    <form action="/sales/" method="post" id='sales_form'>
+    <form action='{% url sales %}' method="post" id='sales_form'>
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Готово" />
+        <div>
+            <input type="submit" value="Готово" class="submit_button"/>
+            <img src="/site_media/images/progress.gif" alt="progressbar" class="progress_image"
+                 style="left: 25%; position: relative; vertical-align: middle; display: none;"/>
+        </div>
     </form>
 </div>
 <br/>
