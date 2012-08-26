@@ -6,7 +6,7 @@
     {% for entry in querySet %}
     [
 
-    	"{{entry.date}}",
+    	"{{entry.date|date:'H:i j(D) n(b) Y'}}",
     	"{{entry.position.name}}",
 		"{{entry.quantity}}",
 		"{{entry.market.name}}"
