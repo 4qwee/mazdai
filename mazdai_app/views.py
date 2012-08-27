@@ -61,4 +61,4 @@ def sales(request):
 
         return HttpResponseRedirect('/')
     else:
-        return render_to_response('sales_list.html', {'entries': SaleEntry.objects.all()})
+        return render_to_response('sales_list.html')
