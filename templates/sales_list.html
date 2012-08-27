@@ -7,6 +7,7 @@
     <link rel="Stylesheet" href="/site_media/css/jquery.dataTables.css" type="text/css"/>
     <script type="text/javascript" src="/site_media/js/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="/site_media/js/jquery-ui-1.8.23.custom.min.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery.ui.datepicker-ru.js"></script>
     <script type="text/javascript" src="/site_media/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -42,6 +43,7 @@
                     dataTable.fnDraw();
                 }
             });
+            $('#datepicker').datepicker($.datepicker.regional['ru']);
         } );
     </script>
 </head>
