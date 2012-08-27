@@ -23,6 +23,25 @@
                     { 'bSortable': false, 'aTargets': [ 1, 2 ] }
                 ]
             });
+
+            var $toolbar = $('div.toolbar');
+            var $label = $('<label/>').attr('for', 'datepicker').html('Дата:');
+            var $datepicker = $('<input/>').attr('type', 'text').attr('id', 'datepicker');
+            $toolbar.append($label);
+            $toolbar.append($datepicker);
+            $('#datepicker').datepicker({
+                dateFormat: "dd.mm.yy",
+                onSelect: function(dateText, instance)
+                {
+                    var date = $(this).datepicker("getDate");
+                    var dataTable = $('#sales-table').dataTable();
+                    var settings = dataTable.fnSettings();
+                    settings.sAjaxSource = '{% url get_sales_list %}' + '?day=' + date.getDay();
+
+                    dataTable.fnClearTable();
+                    dataTable.fnDraw();
+                }
+            });
         } );
     </script>
 </head>
@@ -48,5 +67,12 @@
 
     </tbody>
 </table>
+<br/>
+<br/>
+<div>
+{#    <label for="datepicker">Дата:</label>#}
+{#    <input type="text" id='datepicker'>#}
+</div>
+
 </body>
 </html>
