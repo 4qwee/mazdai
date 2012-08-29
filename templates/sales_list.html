@@ -32,15 +32,13 @@
             $toolbar.append($datepicker);
             $('#datepicker').datepicker({
                 dateFormat: "dd.mm.yy",
+                changeMonth: true,
+                changeYear: true,
                 onSelect: function(dateText, instance)
                 {
                     var date = $(this).datepicker("getDate");
-                    var dataTable = $('#sales-table').dataTable();
-                    var settings = dataTable.fnSettings();
-                    settings.sAjaxSource = '{% url get_sales_list %}' + '?day=' + date.getDay();
-
-                    dataTable.fnClearTable();
-                    dataTable.fnDraw();
+                    window.location.href = '{% url sales_report %}' + '?d=' + date.getDate() + '&m=' +
+                            (date.getMonth() + 1) + '&y=' + (date.getYear() + 1900);
                 }
             });
             $('#datepicker').datepicker($.datepicker.regional['ru']);
@@ -72,8 +70,6 @@
 <br/>
 <br/>
 <div>
-{#    <label for="datepicker">Дата:</label>#}
-{#    <input type="text" id='datepicker'>#}
 </div>
 
 </body>
