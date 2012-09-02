@@ -1,10 +1,10 @@
 # coding=utf-8
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 import datetime
 from django.utils.datastructures import MultiValueDictKeyError, SortedDict
-from itertools import groupby
 import simplejson
 from mazdai_app.models import *
 from mazdai_app.utils import get_datatables_records
@@ -36,13 +36,18 @@ def get_sales_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
+def max_sale_count_validator(value):
+
+    if value == 0 or value > 1:
+        raise ValidationError('Некорректное число!')
+
 
 class SaleForm(forms.Form):
     position_id = forms.IntegerField(max_value=99999)
     market_id = forms.ChoiceField(label='Магазин',
         choices=map(lambda market: (market.id, market.name), Market.objects.all()))
     count = forms.IntegerField(max_value=999, label='Количество', initial=1,
-        widget=forms.TextInput(attrs={'size': '5'}))
+        widget=forms.TextInput(attrs={'size': '5'}), validators=[max_sale_count_validator])
 
 
 def sales(request):
@@ -65,8 +70,12 @@ def sales(request):
                 quantity=count_, market=market)
             entry.save()
 
-            if request.is_ajax():
-                return HttpResponse(simplejson.dumps({'success': 'True'}), content_type='application/javascript')
+            response = simplejson.dumps({'success': True})
+        else:
+            response = simplejson.dumps({'success': False, 'html': form.errors.as_ul()})
+
+        if request.is_ajax():
+            return HttpResponse(response, content_type='application/javascript')
 
         return HttpResponseRedirect('/')
     else:

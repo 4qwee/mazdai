@@ -44,7 +44,6 @@ myJS = function ()
             {
                 var number = $this.find('td').first().html();
                 $sales_popup.find('#id_position_id').val(number);
-                $sales_popup.find('.submit_button').removeAttr('disabled');
                 $sales_popup.dialog('open');
             });
             $toolbar.append($sale);
@@ -69,11 +68,10 @@ myJS = function ()
     $sales_form.submit(function(e)
     {
         e.preventDefault();
+
         $sales_form.find('.submit_button').attr('disabled', 'disabled');
         $("div.toolbar").empty();
         $sales_form.find('.progress_image').show();
-
-//        some info actions
 
         $.ajax({
             url:$sales_form.attr('action'),
@@ -83,15 +81,22 @@ myJS = function ()
             success:function(json)
             {
                 $sales_form.find('img.progress_image').hide();
-                $('#salesPopup').dialog('close');
+                $('#salesPopup').find('.submit_button').removeAttr('disabled');
 
-                var $table = $('#positions-table');
-                $table.dataTable().fnClearTable();
-                $table.dataTable().fnDraw();
+                if (json.success)
+                {
+                    $('#salesPopup').dialog('close');
+
+                    var $table = $('#positions-table');
+                    $table.dataTable().fnClearTable();
+                    $table.dataTable().fnDraw();
+                }
+                else
+                    $('#sales_error').noty({text: json.html, type: 'error'});
             },
             error:function(xhr, ajaxOptions, thrownError)
             {
-
+                $('#sales_error').noty({text: thrownError, type: 'error'});
             }
         })
     });
