@@ -6,7 +6,7 @@ from mazdai_app.models import Market
 from mazdai_app.validators import max_sale_count_validator
 
 class SaleForm(forms.Form):
-    position_id = forms.IntegerField(max_value=99999)
+    position_id = forms.IntegerField()
     market_id = forms.ChoiceField(label='Магазин',
         choices=map(lambda market: (market.id, market.name), Market.objects.all()))
     count = forms.IntegerField(label='Количество', initial=1,
@@ -24,3 +24,14 @@ class SaleForm(forms.Form):
                 self._errors['count'] = self.error_class([e.messages[0]])
 
         return False
+
+class MoveForm(SaleForm):
+    def __init__(self, *args, **kwargs):
+        super(MoveForm, self).__init__(*args, **kwargs)
+
+        self.fields.keyOrder = ['position_id', 'market_id', 'to_market_id', 'count']
+
+    market_id = forms.ChoiceField(label='Из магазина',
+        choices=map(lambda market: (market.id, market.name), Market.objects.all()))
+    to_market_id = forms.ChoiceField(label='В магазин',
+        choices=map(lambda market: (market.id, market.name), Market.objects.all()))

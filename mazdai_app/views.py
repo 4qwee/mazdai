@@ -5,7 +5,7 @@ from django.template.context import RequestContext
 import datetime
 from django.utils.datastructures import MultiValueDictKeyError, SortedDict
 import simplejson
-from mazdai_app.forms import SaleForm
+from mazdai_app.forms import SaleForm, MoveForm
 from mazdai_app.models import *
 from mazdai_app.utils import get_datatables_records
 
@@ -14,7 +14,7 @@ def default(request):
     non_sortable_columns = ', '.join(map(lambda i: str(i), range(3, markets.count() + 3)))
 
     return render_to_response('default.html',
-            {'form': SaleForm(), 'markets': markets, 'non_sortable_columns': non_sortable_columns},
+        dict(safeForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm()),
         RequestContext(request))
 
 

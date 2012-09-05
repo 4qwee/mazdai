@@ -34,8 +34,7 @@ myJS = function ()
     {
         $toolbar.append(createActionButton($row, $sales_popup, 'Продажа'));
 
-        var $expense = $('<input/>').attr('type', 'button').val('Расход').addClass('myButton');
-        $toolbar.append($expense);
+        $toolbar.append(createActionButton($row, $move_popup, 'Расход'));
 
         var $hands = $('<input/>').attr('type', 'button').val('На руки').addClass('myButton');
         $toolbar.append($hands);
@@ -89,9 +88,20 @@ myJS = function ()
     var $toolbar = $("div.toolbar");
     var $sales_popup = $('#salesPopup');
 
-    $sales_popup.find('p').first().hide();// hide first column
-
     createPopup($sales_popup, 'Продажа');
+
+    var $move_popup = $('#movePopup');
+
+    createPopup($move_popup, 'Расход');
+
+    $('.popup').each(function(index)
+    {
+        var $popup = $(this);
+
+        $popup.find('div').eq(1).hide();// hide first field
+
+        $popup.find('form').submit(createSubmitHandler($myTable, $popup, $toolbar));
+    });
 
     $('#bottom_links').buttonset();
 
@@ -116,6 +126,4 @@ myJS = function ()
             createActionBar($this, $toolbar);
         }
     });
-
-    $sales_popup.find('form').submit(createSubmitHandler($myTable, $sales_popup, $toolbar));
 };
