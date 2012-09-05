@@ -103,8 +103,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'mazdai.urls'
 
-TEMPLATE_DIRS = ('/home/4qwee/mazdai/templates',)
-#TEMPLATE_DIRS = ('/home/andrey/PycharmProjects/mazdai/templates',)
+#TEMPLATE_DIRS = ('/home/4qwee/mazdai/templates',)
+TEMPLATE_DIRS = ('/home/andrey/PycharmProjects/mazdai/templates',)
 
 INSTALLED_APPS = (
     'django.contrib.auth',

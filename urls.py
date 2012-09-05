@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^ajax/get-sales-list/$', 'mazdai_app.views.get_sales_list', name = 'get_sales_list'),
     url(r'^sales/report/$', 'mazdai_app.views.sales_report', name='sales_report'),
     url(r'^sales/$', 'mazdai_app.views.sales', name='sales'),
+    url(r'^moves/$', 'mazdai_app.views.moves', name='moves'),
     url(r'^$', 'mazdai_app.views.default'),
 )

@@ -78,7 +78,7 @@
 </div>
 
 <div id="movePopup" style="display: none;" class="popup">
-    <form action='{% url sales %}' method="post" id='replenishment_form'>
+    <form action='{% url moves %}' method="post" id='replenishment_form'>
         {% csrf_token %}
 
         {% for field in moveForm %}

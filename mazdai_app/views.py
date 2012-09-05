@@ -85,3 +85,30 @@ def sales_report(request):
         return render_to_response('sales_report.html', {'date': datetime.date(year, month, day), 'grouped_entries':grouped_entries})
     except MultiValueDictKeyError:
         return HttpResponseBadRequest('<h1>400 Bad Request</h1>')
+
+def moves(request):
+    if request.method == 'POST':
+        form = MoveForm(request.POST)
+
+        if form.is_valid():
+            position_id_ = form.cleaned_data['position_id']
+            from_market_id_ = form.cleaned_data['market_id']
+            to_market_id_ = form.cleaned_data['to_market_id']
+            count_ = form.cleaned_data['count']
+
+            goods_quantity_from = GoodsQuantity.objects.get(position__id=position_id_, market__id=from_market_id_)
+            goods_quantity_from.quantity -= count_
+            goods_quantity_from.save()
+
+            goods_quantity_to = GoodsQuantity.objects.get(position__id=position_id_, market__id=to_market_id_)
+            goods_quantity_to.quantity += count_
+            goods_quantity_to.save()
+
+            response = simplejson.dumps({'success': True})
+        else:
+            response = simplejson.dumps({'success': False, 'html': '<br/>'.join(map(lambda error_list: error_list.as_text(), form.errors.values()))})
+
+        if request.is_ajax():
+            return HttpResponse(response, content_type='application/javascript')
+
+        return HttpResponseRedirect('/')
