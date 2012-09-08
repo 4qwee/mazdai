@@ -36,5 +36,13 @@ class MoveForm(SaleForm):
     to_market_id = forms.ChoiceField(label='В магазин',
         choices=map(lambda market: (market.id, market.name), Market.objects.all()))
 
+    def is_valid(self):
+        if super(MoveForm, self).is_valid():
+            if self.cleaned_data['market_id'] == self.cleaned_data['to_market_id']:
+                self._errors['count'] = self.error_class(['Магазины совпадают!'])
+                return False
+            else:
+                return True
+
 class CreditForm(SaleForm):
     comment = forms.CharField(label='Комментарий', widget=forms.Textarea(attrs={'cols': 28}))
