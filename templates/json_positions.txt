@@ -9,6 +9,7 @@
     	"{{position.id}}",
     	"{{position.name}}",
     	"{{position.description}}",
+    	"{{position.price}}",
     	{% for quantity in position.quantities %}
     	    "{{ quantity }}"
     	    {% if not forloop.last %}

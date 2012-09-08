@@ -11,7 +11,8 @@ from mazdai_app.utils import get_datatables_records
 
 def default(request):
     markets = Market.objects.all().order_by('name')
-    non_sortable_columns = ', '.join(map(lambda i: str(i), range(3, markets.count() + 3)))
+    start_markets_column = 4
+    non_sortable_columns = ', '.join(map(lambda i: str(i), range(start_markets_column, markets.count() + start_markets_column)))
 
     return render_to_response('default.html',
         dict(saleForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm(),
@@ -21,7 +22,7 @@ def default(request):
 
 def get_positions_list(request):
     querySet = Position.objects.all()
-    columnIndexNameMap = {0: 'id', 1: 'name', 2: 'description'}#not all columns
+    columnIndexNameMap = {0: 'id', 1: 'name', 2: 'description', 3: 'price'}#not all columns
     searchableColumns = ['name', 'description']
     jsonTemplatePath = 'json_positions.txt'
 
