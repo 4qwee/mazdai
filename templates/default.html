@@ -59,74 +59,14 @@
     </tbody>
 </table>
 
-<div id='salesPopup' style="display: none;" class="popup">
-    <form action='{% url sales %}' method="post">
-        {% csrf_token %}
+{% url sales as sales_url %}
+{% include 'popup_template.html' with popup_id='salesPopup' form_action=sales_url form=saleForm %}
 
-            {% for field in saleForm %}
-                <div style="clear: both; padding: 10px;">
-                    {% if not field.is_hidden%}
-                        {{ field.label_tag }}:
-                    {% endif %}
-                    <div style="float: right;">{{ field }}</div>
-                </div>
-            {% endfor %}
+{% url moves as moves_url %}
+{% include 'popup_template.html' with popup_id='movePopup' form_action=moves_url form=moveForm %}
 
-        <div>
-            <input type="submit" value="Готово" class="submit_button"/>
-            <img src="/static/images/progress.gif" alt="progressbar" class="progress_image"
-                 style="left: 25%; position: relative; vertical-align: middle; display: none;"/>
-        </div>
-    </form>
-    <br/>
-    <div class="errors"></div>
-</div>
-
-<div id="movePopup" style="display: none;" class="popup">
-    <form action='{% url moves %}' method="post">
-        {% csrf_token %}
-
-        {% for field in moveForm %}
-            <div style="clear: both; padding: 10px;">
-                {% if not field.is_hidden%}
-                    {{ field.label_tag }}:
-                {% endif %}
-                <div style="float: right;">{{ field }}</div>
-            </div>
-        {% endfor %}
-
-        <div style="clear: both;">
-            <input type="submit" value="Готово" class="submit_button"/>
-            <img src="/static/images/progress.gif" alt="progressbar" class="progress_image"
-                 style="left: 25%; position: relative; vertical-align: middle; display: none;"/>
-        </div>
-    </form>
-    <br/>
-    <div class="errors"></div>
-</div>
-
-<div id="creditPopup" style="display: none;" class="popup">
-    <form action='{% url credits %}' method="post">
-        {% csrf_token %}
-
-        {% for field in creditForm %}
-            <div style="clear: both; padding: 10px;">
-                {% if not field.is_hidden%}
-                    {{ field.label_tag }}:
-                {% endif %}
-                <div style="float: right;">{{ field }}</div>
-            </div>
-        {% endfor %}
-
-        <div style="clear: both; padding-top: 10px;">
-            <input type="submit" value="Готово" class="submit_button"/>
-            <img src="/static/images/progress.gif" alt="progressbar" class="progress_image"
-                 style="left: 25%; position: relative; vertical-align: middle; display: none;"/>
-        </div>
-    </form>
-    <br/>
-    <div class="errors"></div>
-</div>
+{% url credits as credits_url %}
+{% include 'popup_template.html' with popup_id='creditPopup' form_action=credits_url form=creditForm %}
 
 <br/>
 <br/>
