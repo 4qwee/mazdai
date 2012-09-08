@@ -132,12 +132,13 @@ def get_moves_list(request):
 
 def credits(request):
     if request.method == 'POST':
-        form = SaleForm(request.POST)
+        form = CreditForm(request.POST)
 
         if form.is_valid():
             position_id_ = form.cleaned_data['position_id']
             market_id_ = form.cleaned_data['market_id']
             count_ = form.cleaned_data['count']
+            comment_ = form.cleaned_data['comment']
 
             position = Position.objects.get(id=position_id_)
             market = Market.objects.get(id=market_id_)
@@ -146,8 +147,8 @@ def credits(request):
             goods_quantity.quantity -= count_
             goods_quantity.save()
 
-            entry = SaleEntry(position=position, date=datetime.datetime.now(),
-                quantity=count_, market=market)
+            entry = CreditEntry(position=position, market=market, date=datetime.datetime.now(), quantity=count_,
+                comment=comment_)
             entry.save()
 
             response = simplejson.dumps({'success': True})

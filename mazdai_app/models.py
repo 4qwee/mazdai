@@ -67,3 +67,7 @@ class SaleEntry(models.Model):
 
 class MoveEntry(SaleEntry):
     market_to = models.ForeignKey(Market)
+
+class CreditEntry(SaleEntry):
+    comment = models.TextField(blank=True, verbose_name='Комментарий')
+    is_active = models.BooleanField(default=True)
