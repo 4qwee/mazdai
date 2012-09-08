@@ -1,0 +1,20 @@
+{
+    "sEcho": {{sEcho}},
+    "iTotalRecords": {{iTotalRecords}},
+    "iTotalDisplayRecords": {{iTotalDisplayRecords}},
+    "aaData":[
+    {% for entry in querySet %}
+    [
+
+    	"{{entry.date|date:'H:i j(D) F Y'}}",
+    	"{{entry.position.name}}",
+		"{{entry.quantity}}",
+		"{{entry.market.name}}",
+		"{{entry.market_to.name}}"
+	]
+    {% if not forloop.last %}
+    ,
+    {% endif %}
+    {% endfor %}
+    ]
+}

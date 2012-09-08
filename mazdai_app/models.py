@@ -64,3 +64,6 @@ class SaleEntry(models.Model):
     date = models.DateTimeField(verbose_name='Дата')
     quantity = models.IntegerField(verbose_name='Количество', max_length=3)
     market = models.ForeignKey(Market, verbose_name='Магазин')
+
+class MoveEntry(SaleEntry):
+    market_to = models.ForeignKey(Market)

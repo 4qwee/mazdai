@@ -105,6 +105,10 @@ def moves(request):
             goods_quantity_to.quantity += count_
             goods_quantity_to.save()
 
+            move_entry = MoveEntry(position=Position.objects.get(id=position_id_), date=datetime.datetime.now(),
+                quantity=count_, market=Market.objects.get(id=from_market_id_),  market_to=Market.objects.get(id=to_market_id_))
+            move_entry.save()
+
             response = simplejson.dumps({'success': True})
         else:
             response = simplejson.dumps({'success': False, 'html': '<br/>'.join(map(lambda error_list: error_list.as_text(), form.errors.values()))})
@@ -113,6 +117,17 @@ def moves(request):
             return HttpResponse(response, content_type='application/javascript')
 
         return HttpResponseRedirect('/')
+    else:
+        return render_to_response('moves_list.html')
+
+def get_moves_list(request):
+    querySet = MoveEntry.objects.all()
+    columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'market__name', 4: 'market_to__name'}
+    searchableColumns = ['position__name', 'market__name', 'market_to__name']
+    jsonTemplatePath = 'json_moves.txt'
+
+    return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
+
 
 def credits(request):
     if request.method == 'POST':
