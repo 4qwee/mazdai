@@ -60,11 +60,11 @@
 </table>
 
 <div id='salesPopup' style="display: none;" class="popup">
-    <form action='{% url sales %}' method="post" id='sales_form'>
+    <form action='{% url sales %}' method="post">
         {% csrf_token %}
 
-        {% for field in moveForm %}
-            <div style="clear: both; padding: 10px;">{{ field.label }} <div style="float: right;">{{ field }}</div></div>
+        {% for field in saleForm %}
+            <div style="clear: both; padding: 10px;">{{ field.label_tag }}:<div style="float: right;">{{ field }}</div></div>
         {% endfor %}
 
         <div>
@@ -78,14 +78,32 @@
 </div>
 
 <div id="movePopup" style="display: none;" class="popup">
-    <form action='{% url moves %}' method="post" id='replenishment_form'>
+    <form action='{% url moves %}' method="post">
         {% csrf_token %}
 
         {% for field in moveForm %}
-            <div style="clear: both; padding: 10px;">{{ field.label }} <div style="float: right;">{{ field }}</div></div>
+            <div style="clear: both; padding: 10px;">{{ field.label_tag }}:<div style="float: right;">{{ field }}</div></div>
         {% endfor %}
 
         <div style="clear: both;">
+            <input type="submit" value="Готово" class="submit_button"/>
+            <img src="/static/images/progress.gif" alt="progressbar" class="progress_image"
+                 style="left: 25%; position: relative; vertical-align: middle; display: none;"/>
+        </div>
+    </form>
+    <br/>
+    <div class="errors"></div>
+</div>
+
+<div id="creditPopup" style="display: none;" class="popup">
+    <form action='{% url credits %}' method="post">
+        {% csrf_token %}
+
+        {% for field in creditForm %}
+            <div style="clear: both; padding: 10px;">{{ field.label_tag }}:<div style="float: right;">{{ field }}</div></div>
+        {% endfor %}
+
+        <div style="clear: both; padding-top: 10px;">
             <input type="submit" value="Готово" class="submit_button"/>
             <img src="/static/images/progress.gif" alt="progressbar" class="progress_image"
                  style="left: 25%; position: relative; vertical-align: middle; display: none;"/>

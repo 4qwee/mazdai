@@ -35,3 +35,6 @@ class MoveForm(SaleForm):
         choices=map(lambda market: (market.id, market.name), Market.objects.all()))
     to_market_id = forms.ChoiceField(label='В магазин',
         choices=map(lambda market: (market.id, market.name), Market.objects.all()))
+
+class CreditForm(SaleForm):
+    comment = forms.CharField(label='Комментарий', widget=forms.Textarea(attrs={'cols': 28}))

@@ -5,7 +5,7 @@ from django.template.context import RequestContext
 import datetime
 from django.utils.datastructures import MultiValueDictKeyError, SortedDict
 import simplejson
-from mazdai_app.forms import SaleForm, MoveForm
+from mazdai_app.forms import *
 from mazdai_app.models import *
 from mazdai_app.utils import get_datatables_records
 
@@ -14,7 +14,8 @@ def default(request):
     non_sortable_columns = ', '.join(map(lambda i: str(i), range(3, markets.count() + 3)))
 
     return render_to_response('default.html',
-        dict(safeForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm()),
+        dict(saleForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm(),
+        creditForm=CreditForm()),
         RequestContext(request))
 
 
@@ -112,3 +113,34 @@ def moves(request):
             return HttpResponse(response, content_type='application/javascript')
 
         return HttpResponseRedirect('/')
+
+def credits(request):
+    if request.method == 'POST':
+        form = SaleForm(request.POST)
+
+        if form.is_valid():
+            position_id_ = form.cleaned_data['position_id']
+            market_id_ = form.cleaned_data['market_id']
+            count_ = form.cleaned_data['count']
+
+            position = Position.objects.get(id=position_id_)
+            market = Market.objects.get(id=market_id_)
+
+            goods_quantity = GoodsQuantity.objects.get(position=position, market=market)
+            goods_quantity.quantity -= count_
+            goods_quantity.save()
+
+            entry = SaleEntry(position=position, date=datetime.datetime.now(),
+                quantity=count_, market=market)
+            entry.save()
+
+            response = simplejson.dumps({'success': True})
+        else:
+            response = simplejson.dumps({'success': False, 'html': '<br/>'.join(map(lambda error_list: error_list.as_text(), form.errors.values()))})
+
+        if request.is_ajax():
+            return HttpResponse(response, content_type='application/javascript')
+
+        return HttpResponseRedirect('/')
+    else:
+        return render_to_response('sales_list.html')

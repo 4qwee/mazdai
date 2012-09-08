@@ -21,7 +21,7 @@ myJS = function ()
     function createActionButton($row, $popup, label)
     {
         var $sale = $('<input/>').attr('type', 'button').val(label).addClass('myButton');
-        $sale.click(function (e)
+        $sale.click(function ()
         {
             var number = $row.find('td').first().html();
             $popup.find('#id_position_id').val(number);
@@ -36,8 +36,7 @@ myJS = function ()
 
         $toolbar.append(createActionButton($row, $move_popup, 'Расход'));
 
-        var $hands = $('<input/>').attr('type', 'button').val('На руки').addClass('myButton');
-        $toolbar.append($hands);
+        $toolbar.append(createActionButton($row, $credit_popup, 'На руки'));
 
         var $order = $('<input/>').attr('type', 'button').val('Заказ').addClass('myButton');
         $toolbar.append($order);
@@ -94,6 +93,10 @@ myJS = function ()
 
     createPopup($move_popup, 'Расход');
 
+    var $credit_popup = $('#creditPopup');
+
+    createPopup($credit_popup, 'На руки');
+
     $('.popup').each(function(index)
     {
         var $popup = $(this);
@@ -105,7 +108,7 @@ myJS = function ()
 
     $('#bottom_links').buttonset();
 
-    $("#positions-table tbody tr").live('click', function (e)
+    $("#positions-table").find("tbody tr").live('click', function (e)
     {
         var $this = $(this);
 
