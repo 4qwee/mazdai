@@ -63,9 +63,14 @@
     <form action='{% url sales %}' method="post">
         {% csrf_token %}
 
-        {% for field in saleForm %}
-            <div style="clear: both; padding: 10px;">{{ field.label_tag }}:<div style="float: right;">{{ field }}</div></div>
-        {% endfor %}
+            {% for field in saleForm %}
+                <div style="clear: both; padding: 10px;">
+                    {% if not field.is_hidden%}
+                        {{ field.label_tag }}:
+                    {% endif %}
+                    <div style="float: right;">{{ field }}</div>
+                </div>
+            {% endfor %}
 
         <div>
             <input type="submit" value="Готово" class="submit_button"/>
@@ -82,7 +87,12 @@
         {% csrf_token %}
 
         {% for field in moveForm %}
-            <div style="clear: both; padding: 10px;">{{ field.label_tag }}:<div style="float: right;">{{ field }}</div></div>
+            <div style="clear: both; padding: 10px;">
+                {% if not field.is_hidden%}
+                    {{ field.label_tag }}:
+                {% endif %}
+                <div style="float: right;">{{ field }}</div>
+            </div>
         {% endfor %}
 
         <div style="clear: both;">
@@ -100,7 +110,12 @@
         {% csrf_token %}
 
         {% for field in creditForm %}
-            <div style="clear: both; padding: 10px;">{{ field.label_tag }}:<div style="float: right;">{{ field }}</div></div>
+            <div style="clear: both; padding: 10px;">
+                {% if not field.is_hidden%}
+                    {{ field.label_tag }}:
+                {% endif %}
+                <div style="float: right;">{{ field }}</div>
+            </div>
         {% endfor %}
 
         <div style="clear: both; padding-top: 10px;">

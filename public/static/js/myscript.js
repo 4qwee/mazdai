@@ -101,8 +101,6 @@ myJS = function ()
     {
         var $popup = $(this);
 
-        $popup.find('div').eq(1).hide();// hide first field
-
         $popup.find('form').submit(createSubmitHandler($myTable, $popup, $toolbar));
     });
 

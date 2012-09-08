@@ -6,7 +6,7 @@ from mazdai_app.models import Market
 from mazdai_app.validators import max_sale_count_validator
 
 class SaleForm(forms.Form):
-    position_id = forms.IntegerField()
+    position_id = forms.IntegerField(widget=forms.HiddenInput)
     market_id = forms.ChoiceField(label='Магазин',
         choices=map(lambda market: (market.id, market.name), Market.objects.all()))
     count = forms.IntegerField(label='Количество', initial=1,
