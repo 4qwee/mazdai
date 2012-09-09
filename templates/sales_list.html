@@ -1,78 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Продажи</title>
-    <link rel="Stylesheet" href="/static/css/jquery-ui-1.8.23.custom.css" type="text/css"/>
-    <link rel="Stylesheet" href="/static/css/jquery.dataTables.css" type="text/css"/>
+{% extends 'list_template.html' %}
 
-    <script type="text/javascript" src="/static/js/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery-ui-1.8.23.custom.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.ui.datepicker-ru.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#sales-table').dataTable({
-                "bPaginate": true,
-                "sPaginationType": "full_numbers",
-                "bServerSide": true,
-                "sAjaxSource": "{% url get_sales_list %}",
-                "bJQueryUI": true,
-                "sDom": '<"toolbar">frtip',
-                "iDisplayLength": 20,
-                "aaSorting": [[ 0, "desc" ]],
-                "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 1, 2 ] }
-                ]
-            });
+{% block ajax_src %}{% url get_sales_list %}{% endblock %}
 
-            var $toolbar = $('div.toolbar');
-            var $label = $('<label/>').attr('for', 'datepicker').html('Дата:').css('margin-right', '5px');
-            var $datepicker = $('<input/>').attr('type', 'text').attr('id', 'datepicker');
-
-            $toolbar.append($label);
-            $toolbar.append($datepicker);
-            $datepicker.datepicker({
-                dateFormat: "dd.mm.yy",
-                changeMonth: true,
-                changeYear: true,
-                onSelect: function(dateText, instance)
-                {
-                    var date = $(this).datepicker("getDate");
-                    window.location.href = '{% url sales_report %}' + '?d=' + date.getDate() + '&m=' +
-                            (date.getMonth() + 1) + '&y=' + (date.getYear() + 1900);
-                }
-            });
-            $datepicker.datepicker($.datepicker.regional['ru']);
-        } );
-    </script>
-</head>
-<body>
-<table id="sales-table" width="100%">
-    <thead>
-    <tr>
-        <th>
-            Дата
-        </th>
-        <th>
-            Имя
-        </th>
-        <th width="100px">
-            Количество
-        </th>
-        <th width="100px">
-            Магазин
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-
-    </tbody>
-</table>
-<br/>
-<br/>
-<div>
-</div>
-
-</body>
-</html>
+{% block table_headers %}
+    <th>
+        Дата
+    </th>
+    <th>
+        Имя
+    </th>
+    <th width="100px">
+        Количество
+    </th>
+    <th width="100px">
+        Магазин
+    </th>
+{% endblock %}
