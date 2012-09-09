@@ -160,4 +160,12 @@ def credits(request):
 
         return HttpResponseRedirect('/')
     else:
-        return render_to_response('sales_list.html')
+        return render_to_response('credits_list.html')
+
+def get_credits_list(request):
+    querySet = CreditEntry.objects.all()
+    columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'comment', 4: 'market__name'}
+    searchableColumns = ['position__name', 'market__name', 'comment']
+    jsonTemplatePath = 'json_credits.txt'
+
+    return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)

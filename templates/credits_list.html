@@ -1,0 +1,21 @@
+{% extends 'list_template.html' %}
+
+{% block ajax_src %}{% url get_credits_list %}{% endblock %}
+
+{% block table_headers %}
+    <th>
+        Дата
+    </th>
+    <th>
+        Имя
+    </th>
+    <th width="100px">
+        Количество
+    </th>
+    <th width="100%">
+        Комментарий
+    </th>
+    <th width="100px">
+    Магазин
+    </th>
+{% endblock %}
