@@ -1,5 +1,9 @@
 {% extends 'list_template.html' %}
 
+{% block title %}
+    Расходы
+{% endblock %}
+
 {% block ajax_src %}{% url get_moves_list %}{% endblock %}
 
 {% block table_headers %}

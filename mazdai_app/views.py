@@ -164,7 +164,8 @@ def credits(request):
 
 def get_credits_list(request):
     querySet = CreditEntry.objects.all()
-    columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'comment', 4: 'market__name'}
+    columnIndexNameMap = {0: 'id', 1: 'is_active', 2: 'date', 3: 'position__name', 4: 'quantity', 5: 'comment',
+                          6: 'market__name'}
     searchableColumns = ['position__name', 'market__name', 'comment']
     jsonTemplatePath = 'json_credits.txt'
 

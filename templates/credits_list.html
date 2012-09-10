@@ -1,9 +1,19 @@
 {% extends 'list_template.html' %}
 
+{% block title %}
+    На руки
+{% endblock %}
+
 {% block ajax_src %}{% url get_credits_list %}{% endblock %}
 
 {% block table_headers %}
-    <th width="150px">
+    <th>
+        Id
+    </th>
+    <th>
+        Is active
+    </th>
+    <th width="250px">
         Дата
     </th>
     <th>
@@ -16,6 +26,57 @@
         Комментарий
     </th>
     <th width="100px">
-    Магазин
+        Магазин
     </th>
+{% endblock %}
+
+{% block additional_table_settings %}'fnRowCallback': function(nRow, aData, iDisplayIbdex)
+{
+    if (aData[1] === 'True')
+        $(nRow).addClass('active_entry');
+
+    return nRow;
+},{% endblock %}
+
+{% block col_defs %}
+    { 'bSortable': false, 'aTargets': [ 3, 4, 5 ] },
+    { "bSearchable": false, "bVisible": false, "aTargets": [ 0, 1 ] },
+{% endblock %}
+
+{% block additional %}
+    <div id="dialog-confirm" title="Закрыть позицию?" style="display: none;">
+        <p>Вы уверены, что хотите закрыть позицию?</p>
+    </div>
+
+
+    <script type="text/javascript">
+        var $myTable = $('#list-table');
+
+        $myTable.find("tbody tr").live('click', function (e)
+        {
+            var $this = $(this);
+
+            if ($this.find('td').first().hasClass('dataTables_empty')) //don't select header
+                return;
+
+            if ($this.hasClass('active_entry'))
+            {
+                $("#dialog-confirm").dialog({
+                    resizable:false,
+                    modal:true,
+                    width:500,
+                    buttons:{
+                        Да:function ()
+                        {
+                            $(this).dialog("close");
+                        },
+                        Нет:function ()
+                        {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

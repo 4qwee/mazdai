@@ -5,7 +5,8 @@
     "aaData":[
     {% for entry in querySet %}
     [
-
+        "{{entry.id}}",
+        "{{entry.is_active}}",
     	"{{entry.date|date:'H:i j(D) F Y'}}",
     	"{{entry.position.name}}",
 		"{{entry.quantity}}",

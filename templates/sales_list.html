@@ -1,5 +1,9 @@
 {% extends 'list_template.html' %}
 
+{% block title %}
+    Продажи
+{% endblock %}
+
 {% block ajax_src %}{% url get_sales_list %}{% endblock %}
 
 {% block table_headers %}

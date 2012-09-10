@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Продажи</title>
+    <title>{% block title%}Title{% endblock %}</title>
     <link rel="Stylesheet" href="/static/css/jquery-ui-1.8.23.custom.css" type="text/css"/>
     <link rel="Stylesheet" href="/static/css/jquery.dataTables.css" type="text/css"/>
 
@@ -22,8 +22,9 @@
                 "sDom": '<"toolbar">frtip',
                 "iDisplayLength": 20,
                 "aaSorting": [[ 0, "desc" ]],
+                {% block additional_table_settings %}{% endblock %}
                 "aoColumnDefs": [
-                    { 'bSortable': false, 'aTargets': [ 1, 2 ] }
+                    {% block col_defs%}{ 'bSortable': false, 'aTargets': [ 1, 2 ] }{% endblock %}
                 ]
             });
 
@@ -61,5 +62,9 @@
 
     </tbody>
 </table>
+
+{% block additional %}
+
+{% endblock %}
 </body>
 </html>

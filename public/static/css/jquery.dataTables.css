@@ -243,3 +243,7 @@ tbody tr.odd:hover, tbody tr.odd td.highlighted {
 .myButton {
     margin-right: 10px;
 }
+
+table.dataTable tr.active_entry td:first-child {
+    border-left: 10px solid #8b0000;
+}
