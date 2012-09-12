@@ -77,6 +77,7 @@ myJS = function ()
                 },
                 error:function (xhr, ajaxOptions, thrownError)
                 {
+                    $form.find('img.progress_image').hide();
                     $errors.noty({text:thrownError, type:'error'});
                 }
             })
