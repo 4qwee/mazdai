@@ -44,6 +44,7 @@
         var $dialog = $("#dialog-confirm");
         var $form = $dialog.find('form');
         var $errors = $('#errors');
+        var $progress_image = $dialog.find('#progress_image');
 
         $form.find('#id_credit_entry_id').val(aData[0]);
 
@@ -54,6 +55,8 @@
             buttons:{
                 Да:function ()
                 {
+                    $progress_image.show();
+
                     $.ajax({
                         url:'{% url credits_tool %}',
                         type:'POST',
@@ -61,8 +64,11 @@
                         dataType:'json',
                         success:function (json)
                         {
+                            $progress_image.hide();
+
                             if (json.success)
                             {
+
                                 $dialog.dialog('close');
 
                                 $myTable.dataTable().fnClearTable();
@@ -73,6 +79,7 @@
                         },
                         error:function (xhr, ajaxOptions, thrownError)
                         {
+                            $progress_image.hide();
                             $errors.noty({text:thrownError, type:'error'});
                         }
                     });
@@ -96,7 +103,11 @@
 
 {% block additional %}
     <div id="dialog-confirm" title="Закрыть позицию?" style="display: none;">
-        <p>Вы уверены, что хотите закрыть позицию?</p>
+        <div style="margin: 10px;width: 100%;">
+            Вы уверены, что хотите закрыть позицию?
+            <img src="/static/images/progress.gif" alt="progressbar" id="progress_image"
+                 style="vertical-align: middle; padding-left: 7%; display: none;"/>
+        </div>
         <form action="{% url credits_tool %}" method="post">
             {% csrf_token %}
 
