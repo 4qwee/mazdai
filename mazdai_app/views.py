@@ -160,7 +160,7 @@ def credits(request):
 
         return HttpResponseRedirect('/')
     else:
-        return render_to_response('credits_list.html')
+        return render_to_response('credits_list.html', {'credit_form': CreditDeactivateForm()}, RequestContext(request))
 
 def get_credits_list(request):
     querySet = CreditEntry.objects.all()
@@ -170,3 +170,21 @@ def get_credits_list(request):
     jsonTemplatePath = 'json_credits.txt'
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
+
+def credits_tool(request):
+    if request.method == 'POST':
+        form = CreditDeactivateForm(request.POST)
+
+        if form.is_valid():
+            credit_entry = CreditEntry.objects.get(id=form.cleaned_data['credit_entry_id'])
+            credit_entry.is_active = not credit_entry.is_active#todo false!
+            credit_entry.save()
+
+            response = simplejson.dumps({'success': True})
+        else:
+            response = simplejson.dumps({'success': False, 'html': 'Неправильный запрос!'})
+
+        if request.is_ajax():
+            return HttpResponse(response, content_type='application/javascript')
+
+    return HttpResponseRedirect('/')

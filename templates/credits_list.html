@@ -30,12 +30,53 @@
     </th>
 {% endblock %}
 
-{% block additional_table_settings %}'fnRowCallback': function(nRow, aData, iDisplayIbdex)
+{% block additional_table_settings %}'fnRowCallback': function(nRow, aData, iDisplayIndex)
 {
-    if (aData[1] === 'True')
-        $(nRow).addClass('active_entry');
+    var $row = $(nRow);
+    var $myTable = $('#list-table');
+    var active = aData[1] === 'True';
+
+    if (active)
+        $row.addClass('active_entry');
+
+    $row.click(function (e)
+    {
+        var $dialog = $("#dialog-confirm");
+        var $form = $dialog.find('form');
+
+        $form.find('#id_credit_entry_id').val(aData[0]);
+
+        $dialog.dialog({
+            resizable:false,
+            modal:true,
+            width:500,
+            buttons:{
+                Да:function ()
+                {
+                    $.ajax({
+                        url:'{% url credits_tool %}',
+                        type:'POST',
+                        data:$form.serialize(),
+                        dataType:'json',
+                        success:function (json)
+                        {
+                            $dialog.dialog('close');
+
+                            $myTable.dataTable().fnClearTable();
+                            $myTable.dataTable().fnDraw();
+                        }
+                    });
+                },
+                Нет:function ()
+                {
+                    $dialog.dialog("close");
+                }
+            }
+        });
+    });
 
     return nRow;
+
 },{% endblock %}
 
 {% block col_defs %}
@@ -46,37 +87,10 @@
 {% block additional %}
     <div id="dialog-confirm" title="Закрыть позицию?" style="display: none;">
         <p>Вы уверены, что хотите закрыть позицию?</p>
+        <form action="{% url credits_tool %}" method="post">
+            {% csrf_token %}
+
+            {{ credit_form }}
+        </form>
     </div>
-
-
-    <script type="text/javascript">
-        var $myTable = $('#list-table');
-
-        $myTable.find("tbody tr").live('click', function (e)
-        {
-            var $this = $(this);
-
-            if ($this.find('td').first().hasClass('dataTables_empty')) //don't select header
-                return;
-
-            if ($this.hasClass('active_entry'))
-            {
-                $("#dialog-confirm").dialog({
-                    resizable:false,
-                    modal:true,
-                    width:500,
-                    buttons:{
-                        Да:function ()
-                        {
-                            $(this).dialog("close");
-                        },
-                        Нет:function ()
-                        {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-            }
-        });
-    </script>
 {% endblock %}

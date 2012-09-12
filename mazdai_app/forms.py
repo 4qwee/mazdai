@@ -46,3 +46,6 @@ class MoveForm(SaleForm):
 
 class CreditForm(SaleForm):
     comment = forms.CharField(label='Комментарий', widget=forms.Textarea(attrs={'cols': 28}))
+
+class CreditDeactivateForm(forms.Form):
+    credit_entry_id = forms.IntegerField(widget=forms.HiddenInput)

@@ -22,5 +22,6 @@ urlpatterns = patterns('',
     url(r'^sales/$', 'mazdai_app.views.sales', name='sales'),
     url(r'^moves/$', 'mazdai_app.views.moves', name='moves'),
     url(r'^credits/$', 'mazdai_app.views.credits', name='credits'),
+    url(r'^credits/tool/$', 'mazdai_app.views.credits_tool', name='credits_tool'),
     url(r'^$', 'mazdai_app.views.default'),
 )
