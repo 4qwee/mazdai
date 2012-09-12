@@ -43,6 +43,7 @@
     {
         var $dialog = $("#dialog-confirm");
         var $form = $dialog.find('form');
+        var $errors = $('#errors');
 
         $form.find('#id_credit_entry_id').val(aData[0]);
 
@@ -60,10 +61,19 @@
                         dataType:'json',
                         success:function (json)
                         {
-                            $dialog.dialog('close');
+                            if (json.success)
+                            {
+                                $dialog.dialog('close');
 
-                            $myTable.dataTable().fnClearTable();
-                            $myTable.dataTable().fnDraw();
+                                $myTable.dataTable().fnClearTable();
+                                $myTable.dataTable().fnDraw();
+                            }
+                            else
+                                $errors.noty({text:json.html, type:'error'});
+                        },
+                        error:function (xhr, ajaxOptions, thrownError)
+                        {
+                            $errors.noty({text:thrownError, type:'error'});
                         }
                     });
                 },
@@ -91,6 +101,7 @@
             {% csrf_token %}
 
             {{ credit_form }}
+            <div id="errors"></div>
         </form>
     </div>
 {% endblock %}

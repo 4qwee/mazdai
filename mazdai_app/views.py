@@ -182,7 +182,7 @@ def credits_tool(request):
 
             response = simplejson.dumps({'success': True})
         else:
-            response = simplejson.dumps({'success': False, 'html': 'Неправильный запрос!'})
+            response = simplejson.dumps({'success': False, 'html': 'Аларм! Что-то сломалось!'})
 
         if request.is_ajax():
             return HttpResponse(response, content_type='application/javascript')
