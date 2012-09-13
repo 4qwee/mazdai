@@ -149,8 +149,16 @@ def credits_tool(request):
 
         def custom_handler(form):
             credit_entry = CreditEntry.objects.get(id=form.cleaned_data['credit_entry_id'])
-            credit_entry.is_active = not credit_entry.is_active#todo false!
+            credit_entry.is_active = False
             credit_entry.save()
+
+            goods_quantity = GoodsQuantity.objects.get(position=credit_entry.position, market=credit_entry.market)
+            goods_quantity.quantity -= credit_entry.quantity
+            goods_quantity.save()
+
+            sale_entry = SaleEntry(position=credit_entry.position, date=datetime.datetime.now(),
+                quantity=credit_entry.quantity, market=credit_entry.market)
+            sale_entry.save()
 
         return handle_form(request, CreditDeactivateForm, custom_handler)
 

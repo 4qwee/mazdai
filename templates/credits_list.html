@@ -39,58 +39,61 @@
     if (active)
         $row.addClass('active_entry');
 
-    $row.click(function (e)
+    if (active)
     {
-        var $dialog = $("#dialog-confirm");
-        var $form = $dialog.find('form');
-        var $errors = $('#errors');
-        var $progress_image = $dialog.find('#progress_image');
+        $row.dblclick(function (e)
+        {
+            var $dialog = $("#dialog-confirm");
+            var $form = $dialog.find('form');
+            var $errors = $('#errors');
+            var $progress_image = $dialog.find('#progress_image');
 
-        $form.find('#id_credit_entry_id').val(aData[0]);
+            $form.find('#id_credit_entry_id').val(aData[0]);
 
-        $dialog.dialog({
-            resizable:false,
-            modal:true,
-            width:500,
-            buttons:{
-                Да:function ()
-                {
-                    $progress_image.show();
+            $dialog.dialog({
+                resizable:false,
+                modal:true,
+                width:500,
+                buttons:{
+                    Да:function ()
+                    {
+                        $progress_image.show();
 
-                    $.ajax({
-                        url:'{% url credits_tool %}',
-                        type:'POST',
-                        data:$form.serialize(),
-                        dataType:'json',
-                        success:function (json)
-                        {
-                            $progress_image.hide();
-
-                            if (json.success)
+                        $.ajax({
+                            url:'{% url credits_tool %}',
+                            type:'POST',
+                            data:$form.serialize(),
+                            dataType:'json',
+                            success:function (json)
                             {
+                                $progress_image.hide();
 
-                                $dialog.dialog('close');
+                                if (json.success)
+                                {
 
-                                $myTable.dataTable().fnClearTable();
-                                $myTable.dataTable().fnDraw();
+                                    $dialog.dialog('close');
+
+                                    $myTable.dataTable().fnClearTable();
+                                    $myTable.dataTable().fnDraw();
+                                }
+                                else
+                                    $errors.noty({text:json.html, type:'error'});
+                            },
+                            error:function (xhr, ajaxOptions, thrownError)
+                            {
+                                $progress_image.hide();
+                                $errors.noty({text:thrownError, type:'error'});
                             }
-                            else
-                                $errors.noty({text:json.html, type:'error'});
-                        },
-                        error:function (xhr, ajaxOptions, thrownError)
-                        {
-                            $progress_image.hide();
-                            $errors.noty({text:thrownError, type:'error'});
-                        }
-                    });
-                },
-                Нет:function ()
-                {
-                    $dialog.dialog("close");
+                        });
+                    },
+                    Нет:function ()
+                    {
+                        $dialog.dialog("close");
+                    }
                 }
-            }
+            });
         });
-    });
+    }
 
     return nRow;
 
