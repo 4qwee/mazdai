@@ -71,3 +71,6 @@ class MoveEntry(SaleEntry):
 class CreditEntry(SaleEntry):
     comment = models.TextField(blank=True, verbose_name='Комментарий')
     is_active = models.BooleanField(default=True)
+
+class OrderEntry(SaleEntry):
+    is_active = models.BooleanField(default=True)

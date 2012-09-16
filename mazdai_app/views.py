@@ -44,6 +44,14 @@ def get_credits_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
+def get_orders_list(request):
+    querySet = OrderEntry.objects.all()
+    columnIndexNameMap = {0: 'id', 1: 'is_active', 2: 'date', 3: 'position__name', 4: 'quantity', 5: 'market__name'}
+    searchableColumns = ['position__name', 'market__name']
+    jsonTemplatePath = 'json_orders.txt'
+
+    return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
+
 def default(request):
     markets = Market.objects.all().order_by('name')
     start_markets_column = 4
@@ -51,7 +59,7 @@ def default(request):
 
     return render_to_response('default.html',
         dict(saleForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm(),
-        creditForm=CreditForm()),
+        creditForm=CreditForm(), orderForm=OrderForm()),
         RequestContext(request))
 
 #post handlers & lists
@@ -142,13 +150,31 @@ def credits(request):
 
         return handle_form(request, CreditForm, custom_handler)
     else:
-        return render_to_response('credits_list.html', {'credit_form': CreditDeactivateForm()}, RequestContext(request))
+        return render_to_response('credits_list.html', {'credit_form': IdForm()}, RequestContext(request))
+
+def orders(request):
+    if request.method == 'POST':
+
+        def custom_handler(form):
+            position_id_ = form.cleaned_data['position_id']
+            market_id_ = form.cleaned_data['market_id']
+            count_ = form.cleaned_data['count']
+
+            position = Position.objects.get(id=position_id_)
+            market = Market.objects.get(id=market_id_)
+
+            entry = OrderEntry(position=position, market=market, date=datetime.datetime.now(), quantity=count_)
+            entry.save()
+
+        return handle_form(request, OrderForm, custom_handler)
+    else:
+        return render_to_response('orders_list.html', {'order_form': IdForm()}, RequestContext(request))
 
 def credits_tool(request):
     if request.method == 'POST':
 
         def custom_handler(form):
-            credit_entry = CreditEntry.objects.get(id=form.cleaned_data['credit_entry_id'])
+            credit_entry = CreditEntry.objects.get(id=form.cleaned_data['id_'])
             credit_entry.is_active = False
             credit_entry.save()
 
@@ -160,7 +186,24 @@ def credits_tool(request):
                 quantity=credit_entry.quantity, market=credit_entry.market)
             sale_entry.save()
 
-        return handle_form(request, CreditDeactivateForm, custom_handler)
+        return handle_form(request, IdForm, custom_handler)
+
+def orders_tool(request):
+    if request.method == 'POST':
+
+        def custom_handler(form):
+            order_entry = OrderEntry.objects.get(id=form.cleaned_data['id_'])
+            order_entry.is_active = False
+            order_entry.save()
+
+            goods_quantity = GoodsQuantity.objects.get(position=order_entry.position, market=order_entry.market)
+            goods_quantity.quantity += order_entry.quantity
+            goods_quantity.save()
+
+            #todo add entry
+
+        return handle_form(request, IdForm, custom_handler)
+
 
 def sales_report(request):
     try:

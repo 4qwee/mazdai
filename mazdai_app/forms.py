@@ -47,5 +47,9 @@ class MoveForm(SaleForm):
 class CreditForm(SaleForm):
     comment = forms.CharField(label='Комментарий', widget=forms.Textarea(attrs={'cols': 28}))
 
-class CreditDeactivateForm(forms.Form):
-    credit_entry_id = forms.IntegerField(widget=forms.HiddenInput)
+class IdForm(forms.Form):
+    id_ = forms.IntegerField(widget=forms.HiddenInput)
+
+class OrderForm(SaleForm):
+    def is_valid(self):
+        return super(SaleForm, self).is_valid()

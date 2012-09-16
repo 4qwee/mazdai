@@ -71,6 +71,9 @@
 {% url credits as credits_url %}
 {% include 'popup_template.html' with popup_id='creditPopup' form_action=credits_url form=creditForm %}
 
+{% url orders as orders_url %}
+{% include 'popup_template.html' with popup_id='orderPopup' form_action=orders_url form=orderForm %}
+
 <br/>
 <br/>
 <div id='bottom_links'>

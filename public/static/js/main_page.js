@@ -33,13 +33,9 @@ myJS = function ()
     function createActionBar($row, $toolbar)
     {
         $toolbar.append(createActionButton($row, $sales_popup, 'Продажа'));
-
         $toolbar.append(createActionButton($row, $move_popup, 'Расход'));
-
         $toolbar.append(createActionButton($row, $credit_popup, 'На руки'));
-
-        var $order = $('<input/>').attr('type', 'button').val('Заказ').addClass('myButton');
-        $toolbar.append($order);
+        $toolbar.append(createActionButton($row, $order_popup, 'Заказ руки'));
 
         $toolbar.buttonset();
     }
@@ -97,6 +93,10 @@ myJS = function ()
     var $credit_popup = $('#creditPopup');
 
     createPopup($credit_popup, 'На руки');
+
+    var $order_popup = $('#orderPopup');
+
+    createPopup($order_popup, 'Заказ');
 
     $('.popup').each(function(index)
     {
