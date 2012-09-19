@@ -1,0 +1,22 @@
+{% extends 'list_template.html' %}
+
+{% block title %}
+    Пополнения
+{% endblock %}
+
+{% block ajax_src %}{% url get_refills_list %}{% endblock %}
+
+{% block table_headers %}
+    <th width="150px">
+        Дата
+    </th>
+    <th>
+        Имя
+    </th>
+    <th width="100px">
+        Количество
+    </th>
+    <th width="25%">
+        Магазин
+    </th>
+{% endblock %}

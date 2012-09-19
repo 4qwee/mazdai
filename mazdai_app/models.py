@@ -74,3 +74,6 @@ class CreditEntry(SaleEntry):
 
 class OrderEntry(SaleEntry):
     is_active = models.BooleanField(default=True)
+
+class RefillEntry(SaleEntry):
+    pass

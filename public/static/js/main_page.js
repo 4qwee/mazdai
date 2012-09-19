@@ -36,6 +36,7 @@ myJS = function ()
         $toolbar.append(createActionButton($row, $move_popup, 'Расход'));
         $toolbar.append(createActionButton($row, $credit_popup, 'На руки'));
         $toolbar.append(createActionButton($row, $order_popup, 'Заказ'));
+        $toolbar.append(createActionButton($row, $refill_popup, 'Пополнение'));
 
         $toolbar.buttonset();
     }
@@ -82,21 +83,21 @@ myJS = function ()
 
     var $myTable = $('#positions-table');
     var $toolbar = $("div.toolbar");
-    var $sales_popup = $('#salesPopup');
 
+    var $sales_popup = $('#salesPopup');
     createPopup($sales_popup, 'Продажа');
 
     var $move_popup = $('#movePopup');
-
     createPopup($move_popup, 'Расход');
 
     var $credit_popup = $('#creditPopup');
-
     createPopup($credit_popup, 'На руки');
 
     var $order_popup = $('#orderPopup');
-
     createPopup($order_popup, 'Заказ');
+
+    var $refill_popup = $('#refillPopup');
+    createPopup($refill_popup, 'Пополнение');
 
     $('.popup').each(function(index)
     {

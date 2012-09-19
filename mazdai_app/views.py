@@ -52,6 +52,14 @@ def get_orders_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
+def get_refills_list(request):
+    querySet = RefillEntry.objects.all()
+    columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'market__name'}
+    searchableColumns = ['position__name', 'market__name']
+    jsonTemplatePath = 'json_refills.txt'
+
+    return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
+
 def default(request):
     markets = Market.objects.all().order_by('name')
     start_markets_column = 4
@@ -59,7 +67,7 @@ def default(request):
 
     return render_to_response('default.html',
         dict(saleForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm(),
-        creditForm=CreditForm(), orderForm=OrderForm()),
+        creditForm=CreditForm(), orderForm=OrderForm(), refillForm=RefillForm()),
         RequestContext(request))
 
 #post handlers & lists
@@ -170,6 +178,28 @@ def orders(request):
     else:
         return render_to_response('orders_list.html', {'order_form': IdForm()}, RequestContext(request))
 
+def refills(request):
+    if request.method == 'POST':
+
+        def custom_handler(form):
+            position_id_ = form.cleaned_data['position_id']
+            market_id_ = form.cleaned_data['market_id']
+            count_ = form.cleaned_data['count']
+
+            position = Position.objects.get(id=position_id_)
+            market = Market.objects.get(id=market_id_)
+
+            goods_quantity = GoodsQuantity.objects.get(position__id=position_id_, market__id=market_id_)
+            goods_quantity.quantity += count_
+            goods_quantity.save()
+
+            entry = RefillEntry(position=position, market=market, date=datetime.datetime.now(), quantity=count_)
+            entry.save()
+
+        return handle_form(request, RefillForm, custom_handler)
+    else:
+        return render_to_response('refills_list.html')
+
 def credits_tool(request):
     if request.method == 'POST':
 
@@ -196,7 +226,9 @@ def orders_tool(request):
             goods_quantity.quantity += order_entry.quantity
             goods_quantity.save()
 
-            #todo add entry
+            refill_entry = RefillEntry(position=goods_quantity.position, market=goods_quantity.market,
+                quantity=order_entry.quantity, date=datetime.datetime.now())
+            refill_entry.save()
 
         return handle_form(request, IdForm, custom_handler)
 

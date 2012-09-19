@@ -74,6 +74,9 @@
 {% url orders as orders_url %}
 {% include 'popup_template.html' with popup_id='orderPopup' form_action=orders_url form=orderForm %}
 
+{% url refills as refills_url %}
+{% include 'popup_template.html' with popup_id='refillPopup' form_action=refills_url form=refillForm %}
+
 <br/>
 <br/>
 <div id='bottom_links'>
@@ -81,6 +84,7 @@
     <a href='{% url moves %}'>Лист расходов</a>
     <a href='{% url credits %}'>Лист на руки</a>
     <a href='{% url orders %}'>Лист заказов</a>
+    <a href='{% url refills %}'>Лист пополнений</a>
 </div>
 </body>
 </html>
