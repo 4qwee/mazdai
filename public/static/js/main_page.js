@@ -35,7 +35,7 @@ myJS = function ()
         $toolbar.append(createActionButton($row, $sales_popup, 'Продажа'));
         $toolbar.append(createActionButton($row, $move_popup, 'Расход'));
         $toolbar.append(createActionButton($row, $credit_popup, 'На руки'));
-        $toolbar.append(createActionButton($row, $order_popup, 'Заказ руки'));
+        $toolbar.append(createActionButton($row, $order_popup, 'Заказ'));
 
         $toolbar.buttonset();
     }

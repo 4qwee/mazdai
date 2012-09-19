@@ -1,4 +1,4 @@
-{% extends 'list_template.html' %}
+{% extends 'interactive_list_template.html' %}
 
 {% block title %}
     Заказ
@@ -27,92 +27,7 @@
     </th>
 {% endblock %}
 
-{% block additional_table_settings %}'fnRowCallback': function(nRow, aData, iDisplayIndex)
-    {
-        var $row = $(nRow);
-        var $myTable = $('#list-table');
-        var active = aData[1] === 'True';
-
-        if (active)
-            $row.addClass('active_entry');
-
-        if (active)
-        {
-            $row.dblclick(function (e)
-            {
-                var $dialog = $("#dialog-confirm");
-                var $form = $dialog.find('form');
-                var $errors = $('#errors');
-                var $progress_image = $dialog.find('#progress_image');
-
-                $form.find('#id_id_').val(aData[0]);
-
-                $dialog.dialog({
-                    resizable:false,
-                    modal:true,
-                    width:500,
-                    buttons:{
-                        Да:function ()
-                        {
-                            $progress_image.show();
-
-                            $.ajax({
-                                url:'{% url orders_tool %}',
-                                type:'POST',
-                                data:$form.serialize(),
-                                dataType:'json',
-                                success:function (json)
-                                {
-                                    $progress_image.hide();
-
-                                    if (json.success)
-                                    {
-
-                                        $dialog.dialog('close');
-
-                                        $myTable.dataTable().fnClearTable();
-                                        $myTable.dataTable().fnDraw();
-                                    }
-                                    else
-                                        $errors.noty({text:json.html, type:'error'});
-                                },
-                                error:function (xhr, ajaxOptions, thrownError)
-                                {
-                                    $progress_image.hide();
-                                    $errors.noty({text:thrownError, type:'error'});
-                                }
-                            });
-                        },
-                        Нет:function ()
-                        {
-                            $dialog.dialog("close");
-                        }
-                    }
-                });
-            });
-        }
-
-        return nRow;
-
-    },{% endblock %}
-
-{% block col_defs %}
-    { 'bSortable': false, 'aTargets': [ 3, 4, 5 ] },
-    { "bSearchable": false, "bVisible": false, "aTargets": [ 0, 1 ] },
-{% endblock %}
-
-{% block additional %}
-    <div id="dialog-confirm" title="Товар доставлен?" style="display: none;">
-        <div style="margin: 10px;width: 100%;">
-            Вы уверены, что товар доставлен?
-            <img src="/static/images/progress.gif" alt="progressbar" id="progress_image"
-                 style="vertical-align: middle; padding-left: 7%; display: none;"/>
-        </div>
-        <form action="{% url orders_tool %}" method="post">
-            {% csrf_token %}
-
-            {{ order_form }}
-            <div id="errors"></div>
-        </form>
-    </div>
-{% endblock %}
+{% block popup_action %}{% url orders_tool %}{% endblock %}
+{% block popup_title %}Товар доставлен?{% endblock %}
+{% block popup_text %}Вы уверены, что товар доставлен?{% endblock %}
+{% block popup_form %}{{ order_form }}{% endblock %}
