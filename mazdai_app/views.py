@@ -119,16 +119,20 @@ def moves(request):
             to_market_id_ = form.cleaned_data['to_market_id']
             count_ = form.cleaned_data['count']
 
-            goods_quantity_from = GoodsQuantity.objects.get(position__id=position_id_, market__id=from_market_id_)
+            position = Position.objects.get(id=position_id_)
+            market_from = Market.objects.get(id=from_market_id_)
+            market_to = Market.objects.get(id=to_market_id_)
+
+            goods_quantity_from = GoodsQuantity.objects.get(position=position, market=market_from)
             goods_quantity_from.quantity -= count_
             goods_quantity_from.save()
 
-            goods_quantity_to = GoodsQuantity.objects.get(position__id=position_id_, market__id=to_market_id_)
+            goods_quantity_to = GoodsQuantity.objects.get(position=position, market=market_to)
             goods_quantity_to.quantity += count_
             goods_quantity_to.save()
 
-            move_entry = MoveEntry(position=Position.objects.get(id=position_id_), date=datetime.datetime.now(),
-                quantity=count_, market=Market.objects.get(id=from_market_id_),  market_to=Market.objects.get(id=to_market_id_))
+            move_entry = MoveEntry(position=position, date=datetime.datetime.now(),
+                quantity=count_, market=market_from,  market_to=market_to)
             move_entry.save()
 
         return handle_form(request, MoveForm, custom_handler)
