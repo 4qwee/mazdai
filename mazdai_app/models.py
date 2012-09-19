@@ -30,8 +30,8 @@ class Position(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Позиция'
-        verbose_name_plural = 'Позиции'
+        verbose_name = 'позиция'
+        verbose_name_plural = 'позиции'
 
 
 class Market(models.Model):
@@ -58,22 +58,27 @@ class GoodsQuantity(models.Model):
         verbose_name = 'Количество товара'
         verbose_name_plural = 'Количества товара'
 
-
-class SaleEntry(models.Model):
+class PositionEntry(models.Model):
     position = models.ForeignKey(Position)
     date = models.DateTimeField(verbose_name='Дата')
     quantity = models.IntegerField(verbose_name='Количество', max_length=3)
     market = models.ForeignKey(Market, verbose_name='Магазин')
 
-class MoveEntry(SaleEntry):
-    market_to = models.ForeignKey(Market)
+    class Meta:
+        abstract = True
 
-class CreditEntry(SaleEntry):
+class SaleEntry(PositionEntry):
+    pass
+
+class MoveEntry(PositionEntry):
+    market_to = models.ForeignKey(Market, related_name='fk_market_to')
+
+class CreditEntry(PositionEntry):
     comment = models.TextField(blank=True, verbose_name='Комментарий')
     is_active = models.BooleanField(default=True)
 
-class OrderEntry(SaleEntry):
+class OrderEntry(PositionEntry):
     is_active = models.BooleanField(default=True)
 
-class RefillEntry(SaleEntry):
+class RefillEntry(PositionEntry):
     pass
