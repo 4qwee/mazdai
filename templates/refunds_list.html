@@ -1,0 +1,22 @@
+{% extends 'list_template.html' %}
+
+{% block title %}
+    Возвраты
+{% endblock %}
+
+{% block ajax_src %}{% url get_refunds_list %}{% endblock %}
+
+{% block table_headers %}
+    <th width="150px">
+        Дата
+    </th>
+    <th>
+        Имя
+    </th>
+    <th width="100px">
+        Количество
+    </th>
+    <th width="25%">
+        Магазин
+    </th>
+{% endblock %}

@@ -60,6 +60,9 @@ def get_orders_list(request):
 def get_refills_list(request):
     return default_entries_list(request, RefillEntry)
 
+def get_refunds_list(request):
+    return default_entries_list(request, RefundEntry)
+
 def default(request):
     markets = Market.objects.all().order_by('name')
     start_markets_column = 4
@@ -67,7 +70,7 @@ def default(request):
 
     return render_to_response('default.html',
         dict(saleForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm(),
-        creditForm=CreditForm(), orderForm=OrderForm(), refillForm=RefillForm()),
+        creditForm=CreditForm(), orderForm=OrderForm(), refillForm=RefillForm(), refundForm=RefillForm()),
         RequestContext(request))
 
 #post handlers & lists
@@ -203,6 +206,28 @@ def refills(request):
         return handle_form(request, RefillForm, custom_handler)
     else:
         return render_to_response('refills_list.html')
+
+def refunds(request):
+    if request.method == 'POST':
+
+        def custom_handler(form):
+            position_id_ = form.cleaned_data['position_id']
+            market_id_ = form.cleaned_data['market_id']
+            count_ = form.cleaned_data['count']
+
+            position = Position.objects.get(id=position_id_)
+            market = Market.objects.get(id=market_id_)
+
+            goods_quantity = GoodsQuantity.objects.get(position__id=position_id_, market__id=market_id_)
+            goods_quantity.quantity += count_
+            goods_quantity.save()
+
+            entry = RefundEntry(position=position, market=market, date=datetime.datetime.now(), quantity=count_)
+            entry.save()
+
+        return handle_form(request, RefundForm, custom_handler)
+    else:
+        return render_to_response('refunds_list.html')
 
 def credits_tool(request):
     if request.method == 'POST':

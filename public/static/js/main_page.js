@@ -37,6 +37,7 @@ myJS = function ()
         $toolbar.append(createActionButton($row, $credit_popup, 'На руки'));
         $toolbar.append(createActionButton($row, $order_popup, 'Заказ'));
         $toolbar.append(createActionButton($row, $refill_popup, 'Пополнение'));
+        $toolbar.append(createActionButton($row, $refund_popup, 'Возврат'));
 
         $toolbar.buttonset();
     }
@@ -98,6 +99,9 @@ myJS = function ()
 
     var $refill_popup = $('#refillPopup');
     createPopup($refill_popup, 'Пополнение');
+
+    var $refund_popup = $('#refundPopup');
+    createPopup($refund_popup, 'Возврат');
 
     $('.popup').each(function(index)
     {
