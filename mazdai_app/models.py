@@ -82,3 +82,6 @@ class OrderEntry(PositionEntry):
 
 class RefillEntry(PositionEntry):
     pass
+
+class RefundEntry(PositionEntry):
+    pass

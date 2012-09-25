@@ -57,3 +57,7 @@ class OrderForm(SaleForm):
 class RefillForm(SaleForm):
     def is_valid(self):
         return super(SaleForm, self).is_valid()
+
+class RefundForm(SaleForm):
+    def is_valid(self):
+        return super(SaleForm, self).is_valid()

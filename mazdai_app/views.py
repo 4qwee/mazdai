@@ -19,13 +19,18 @@ def get_positions_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
-def get_sales_list(request):
-    querySet = SaleEntry.objects.all()
+
+def default_entries_list(request, entry_class):
+    querySet = entry_class.objects.all()
     columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'market__name'}
     searchableColumns = ['position__name', 'market__name']
-    jsonTemplatePath = 'json_sales.txt'
+    jsonTemplatePath = 'default_json_entries_list.txt'
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
+
+
+def get_sales_list(request):
+    return default_entries_list(request, SaleEntry)
 
 def get_moves_list(request):
     querySet = MoveEntry.objects.all()
@@ -53,12 +58,7 @@ def get_orders_list(request):
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
 def get_refills_list(request):
-    querySet = RefillEntry.objects.all()
-    columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'market__name'}
-    searchableColumns = ['position__name', 'market__name']
-    jsonTemplatePath = 'json_refills.txt'
-
-    return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
+    return default_entries_list(request, RefillEntry)
 
 def default(request):
     markets = Market.objects.all().order_by('name')
