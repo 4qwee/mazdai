@@ -45,7 +45,7 @@
                 onSelect: function(dateText, instance)
                 {
                     var date = $(this).datepicker("getDate");
-                    window.location.href = '{% url sales_report %}' + '?d=' + date.getDate() + '&m=' +
+                    window.location.href = '{% url report %}' + '?d=' + date.getDate() + '&m=' +
                             (date.getMonth() + 1) + '&y=' + (date.getYear() + 1900);
                 }
             });

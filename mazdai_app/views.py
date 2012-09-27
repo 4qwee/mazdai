@@ -262,21 +262,50 @@ def orders_tool(request):
         return handle_form(request, IdForm, custom_handler)
 
 
-def sales_report(request):
+def report(request):
+    class MarketEntry():
+        def __init__(self, name, sales, refunds, moves, orders):
+            self.name = name
+            self.sales = sales
+            self.refunds = refunds
+            self.moves = moves
+            self.orders = orders
+
+        @property
+        def profit(self):
+            result = 0
+
+            for entry in self.sales:
+                result += entry.quantity * entry.position.price
+
+            for entry in self.refunds:
+                result -= entry.quantity * entry.position.price
+
+            return result
+
     try:
         day = int(request.GET['d'])
         month = int(request.GET['m'])
         year = int(request.GET['y'])
 
-        entries = SaleEntry.objects.filter(date__day=day, date__month=month, date__year=year)
-        grouped_entries = SortedDict()
+        markets_entries = Market.objects.all()
+        sale_entries = SaleEntry.objects.filter(date__day=day, date__month=month, date__year=year)
+        refund_entries = RefundEntry.objects.filter(date__day=day, date__month=month, date__year=year)
+        move_entries = MoveEntry.objects.filter(date__day=day, date__month=month, date__year=year)
+        order_entries = OrderEntry.objects.filter(date__day=day, date__month=month, date__year=year)
 
-        for entry in entries:
-            if not grouped_entries.has_key(entry.market.name):
-                grouped_entries[entry.market.name] = []
+        markets = []
 
-            grouped_entries[entry.market.name].append(entry)
+        for market_entry in markets_entries:
+            market_sales = sale_entries.filter(market=market_entry)
+            market_refunds = refund_entries.filter(market=market_entry)
+            market_moves = move_entries.filter(market=market_entry)
+            market_orders = order_entries.filter(market=market_entry)
 
-        return render_to_response('sales_report.html', {'date': datetime.date(year, month, day), 'grouped_entries':grouped_entries})
+            if market_sales or market_refunds or market_moves or market_orders:
+                markets.append(MarketEntry(market_entry.name, market_sales, market_refunds, market_moves, market_orders))
+
+        return render_to_response('report.html', {'date': datetime.date(year, month, day), 'markets':markets})
+
     except MultiValueDictKeyError:
         return HttpResponseBadRequest('<h1>400 Bad Request</h1>')

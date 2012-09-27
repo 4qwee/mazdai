@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Отчёт по продажам</title>
+    <link rel="Stylesheet" href="/static/css/report.css" type="text/css"/>
+</head>
+<body>
+
+{% load filters %}
+
+<h1>Отчёт по продажам на {{ date }}</h1>
+<hr/>
+{% for market in markets %}
+    <h2>{{ market.name }}</h2>
+
+    {% if market.sales or market.refunds%}
+        <table cellspacing="0" border="1px solid black">
+            <thead>
+            {% if market.sales%}<tr><th colspan="6">Продажи</th></tr>
+                <tr>
+                    <th>Номер</th>
+                    <th>Имя</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                </tr>
+            {% endif %}
+            </thead>
+            <tbody>
+
+            {% for entry in market.sales %}
+                <tr>
+                    <td>{{ entry.position.id }}</td>
+                    <td>{{ entry.position.name }}</td>
+                    <td>{{ entry.position.description }}</td>
+                    <td>{{ entry.position.price }}</td>
+                    <td>{{ entry.quantity }}</td>
+                    <td>{{ entry|calculate_sum }}</td>
+                </tr>
+            {% endfor %}
+
+            {% if market.refunds%}
+                <tr><th colspan="6">Возвраты</th></tr>
+                <tr>
+                    <th>Номер</th>
+                    <th>Имя</th>
+                    <th>Описание</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                </tr>
+            {% endif %}
+
+            {% for entry in market.refunds %}
+                <tr>
+                    <td>{{ entry.position.id }}</td>
+                    <td>{{ entry.position.name }}</td>
+                    <td>{{ entry.position.description }}</td>
+                    <td>{{ entry.position.price }}</td>
+                    <td>{{ entry.quantity }}</td>
+                    <td>{{ entry|calculate_sum }}</td>
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <td colspan="4">&nbsp;</td>
+                <td><b>Сумма</b></td>
+                <td>{{ market.profit }}</td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <br/>
+        <br/>
+    {% endif %}
+
+    {% if market.moves%}
+        <table cellspacing="0" border="1px solid black">
+            <thead>
+            <tr><th colspan="5">Расходы</th></tr>
+            <tr>
+                <th>Номер</th>
+                <th>Имя</th>
+                <th>Описание</th>
+                <th>Куда</th>
+                <th>Количество</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for entry in market.moves %}
+                <tr>
+                    <td>{{ entry.position.id }}</td>
+                    <td>{{ entry.position.name }}</td>
+                    <td>{{ entry.position.description }}</td>
+                    <td>{{ entry.market_to }}</td>
+                    <td>{{ entry.quantity }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+        <br/>
+        <br/>
+    {% endif %}
+
+    {% if market.orders%}
+        <table cellspacing="0" border="1px solid black">
+            <thead>
+            <tr><th colspan="4">Заказы</th></tr>
+            <tr>
+                <th>Номер</th>
+                <th>Имя</th>
+                <th>Описание</th>
+                <th>Количество</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for entry in market.orders %}
+                <tr>
+                    <td>{{ entry.position.id }}</td>
+                    <td>{{ entry.position.name }}</td>
+                    <td>{{ entry.position.description }}</td>
+                    <td>{{ entry.quantity }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    {% endif %}
+
+{% empty %}
+    <h2>Никаких операций</h2>
+{% endfor %}
+</body>
+</html>
