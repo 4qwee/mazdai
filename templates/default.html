@@ -30,7 +30,9 @@
                 ]
             });
 
-            myJS();
+            {% if is_authenticated%}
+                myJS();
+            {% endif %}
         } );
     </script>
 </head>
@@ -62,33 +64,93 @@
     </tbody>
 </table>
 
-{% url sales as sales_url %}
-{% include 'popup_template.html' with popup_id='salesPopup' form_action=sales_url form=saleForm %}
+{% if is_authenticated%}
+    {% url sales as sales_url %}
+    {% include 'popup_template.html' with popup_id='salesPopup' form_action=sales_url form=saleForm %}
 
-{% url moves as moves_url %}
-{% include 'popup_template.html' with popup_id='movePopup' form_action=moves_url form=moveForm %}
+    {% url moves as moves_url %}
+    {% include 'popup_template.html' with popup_id='movePopup' form_action=moves_url form=moveForm %}
 
-{% url credits as credits_url %}
-{% include 'popup_template.html' with popup_id='creditPopup' form_action=credits_url form=creditForm %}
+    {% url credits as credits_url %}
+    {% include 'popup_template.html' with popup_id='creditPopup' form_action=credits_url form=creditForm %}
 
-{% url orders as orders_url %}
-{% include 'popup_template.html' with popup_id='orderPopup' form_action=orders_url form=orderForm %}
+    {% url orders as orders_url %}
+    {% include 'popup_template.html' with popup_id='orderPopup' form_action=orders_url form=orderForm %}
 
-{% url refills as refills_url %}
-{% include 'popup_template.html' with popup_id='refillPopup' form_action=refills_url form=refillForm %}
+    {% url refills as refills_url %}
+    {% include 'popup_template.html' with popup_id='refillPopup' form_action=refills_url form=refillForm %}
 
-{% url refunds as refunds_url %}
-{% include 'popup_template.html' with popup_id='refundPopup' form_action=refunds_url form=refundForm %}
+    {% url refunds as refunds_url %}
+    {% include 'popup_template.html' with popup_id='refundPopup' form_action=refunds_url form=refundForm %}
 
-<br/>
-<br/>
-<div id='bottom_links'>
-    <a href='{% url sales %}'>Лист продаж</a>
-    <a href='{% url moves %}'>Лист расходов</a>
-    <a href='{% url credits %}'>Лист на руки</a>
-    <a href='{% url orders %}'>Лист заказов</a>
-    <a href='{% url refills %}'>Лист пополнений</a>
-    <a href='{% url refunds %}'>Лист возвратов</a>
-</div>
+    <br/>
+    <br/>
+
+    <div id='bottom_links'>
+        <a href='{% url sales %}'>Лист продаж</a>
+        <a href='{% url moves %}'>Лист расходов</a>
+        <a href='{% url credits %}'>Лист на руки</a>
+        <a href='{% url orders %}'>Лист заказов</a>
+        <a href='{% url refills %}'>Лист пополнений</a>
+        <a href='{% url refunds %}'>Лист возвратов</a>
+        <a href='{% url logout %}'>Выход</a>
+    </div>
+{% else %}
+    {% url login as login_url %}
+    {% include 'popup_template.html' with popup_id='loginPopup' form_action=login_url form=loginForm %}
+
+    <script type="text/javascript">
+        $('document').ready(function()
+        {
+            var $toolbar = $("div.toolbar");
+
+            var $login_popup = $('#loginPopup');
+            createPopup($login_popup, 'Вход');
+
+            var $button = $('<input/>').attr('type', 'button').val('Вход').button();
+            $button.click(function ()
+            {
+                $login_popup.dialog('open');
+            });
+            $toolbar.append($button);
+
+            var $form = $login_popup.find('form');
+            $form.submit(function(e)
+            {
+                e.preventDefault();
+
+                var $errors = $login_popup.find('.errors');
+
+                $form.find('.submit_button').attr('disabled', 'disabled');
+                $form.find('.progress_image').show();
+
+                $.ajax({
+                    url:$form.attr('action'),
+                    type:$form.attr('method'),
+                    data:$form.serialize(),
+                    dataType:'json',
+                    success:function (json)
+                    {
+                        $form.find('img.progress_image').hide();
+                        $login_popup.find('.submit_button').removeAttr('disabled');
+                        if (json.success)
+                        {
+                            location.replace('/');
+                        }
+                        else
+                            $errors.noty({text:json.html, type:'error'});
+                    },
+                    error:function (xhr, ajaxOptions, thrownError)
+                    {
+                        $form.find('img.progress_image').hide();
+                        $errors.noty({text:thrownError, type:'error'});
+                        $login_popup.find('.submit_button').removeAttr('disabled');
+                    }
+                })
+
+            });
+        })
+    </script>
+{% endif %}
 </body>
 </html>

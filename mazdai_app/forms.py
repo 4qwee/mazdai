@@ -61,3 +61,7 @@ class RefillForm(SaleForm):
 class RefundForm(SaleForm):
     def is_valid(self):
         return super(SaleForm, self).is_valid()
+
+class LoginForm(forms.Form):
+    login = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'size': '10'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'size': '10'}))

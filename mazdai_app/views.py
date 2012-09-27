@@ -1,4 +1,6 @@
 # coding=utf-8
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
@@ -19,7 +21,7 @@ def get_positions_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
-
+@login_required(login_url='/')
 def default_entries_list(request, entry_class):
     querySet = entry_class.objects.all()
     columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'market__name'}
@@ -28,10 +30,11 @@ def default_entries_list(request, entry_class):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
-
+@login_required(login_url='/')
 def get_sales_list(request):
     return default_entries_list(request, SaleEntry)
 
+@login_required(login_url='/')
 def get_moves_list(request):
     querySet = MoveEntry.objects.all()
     columnIndexNameMap = {0: 'date', 1: 'position__name', 2: 'quantity', 3: 'market__name', 4: 'market_to__name'}
@@ -40,6 +43,7 @@ def get_moves_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
+@login_required(login_url='/')
 def get_credits_list(request):
     querySet = CreditEntry.objects.all()
     columnIndexNameMap = {0: 'id', 1: 'is_active', 2: 'date', 3: 'position__name', 4: 'quantity', 5: 'comment',
@@ -49,6 +53,7 @@ def get_credits_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
+@login_required(login_url='/')
 def get_orders_list(request):
     querySet = OrderEntry.objects.all()
     columnIndexNameMap = {0: 'id', 1: 'is_active', 2: 'date', 3: 'position__name', 4: 'quantity', 5: 'market__name'}
@@ -57,9 +62,11 @@ def get_orders_list(request):
 
     return get_datatables_records(request, querySet, columnIndexNameMap, searchableColumns, jsonTemplatePath)
 
+@login_required(login_url='/')
 def get_refills_list(request):
     return default_entries_list(request, RefillEntry)
 
+@login_required(login_url='/')
 def get_refunds_list(request):
     return default_entries_list(request, RefundEntry)
 
@@ -70,7 +77,8 @@ def default(request):
 
     return render_to_response('default.html',
         dict(saleForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm(),
-        creditForm=CreditForm(), orderForm=OrderForm(), refillForm=RefillForm(), refundForm=RefillForm()),
+            creditForm=CreditForm(), orderForm=OrderForm(), refillForm=RefillForm(), refundForm=RefillForm(),
+            loginForm=LoginForm(), is_authenticated=request.user.is_authenticated(), user=request.user),
         RequestContext(request))
 
 #post handlers & lists
@@ -90,6 +98,7 @@ def handle_form(request, formClass, handler):
 
     return HttpResponseRedirect('/')
 
+@login_required(login_url='/')
 def sales(request):
     if request.method == 'POST':
 
@@ -113,6 +122,7 @@ def sales(request):
     else:
         return render_to_response('sales_list.html')
 
+@login_required(login_url='/')
 def moves(request):
     if request.method == 'POST':
 
@@ -143,6 +153,7 @@ def moves(request):
     else:
         return render_to_response('moves_list.html')
 
+@login_required(login_url='/')
 def credits(request):
     if request.method == 'POST':
 
@@ -167,6 +178,7 @@ def credits(request):
     else:
         return render_to_response('credits_list.html', {'credit_form': IdForm()}, RequestContext(request))
 
+@login_required(login_url='/')
 def orders(request):
     if request.method == 'POST':
 
@@ -185,6 +197,7 @@ def orders(request):
     else:
         return render_to_response('orders_list.html', {'order_form': IdForm()}, RequestContext(request))
 
+@login_required(login_url='/')
 def refills(request):
     if request.method == 'POST':
 
@@ -207,6 +220,7 @@ def refills(request):
     else:
         return render_to_response('refills_list.html')
 
+@login_required(login_url='/')
 def refunds(request):
     if request.method == 'POST':
 
@@ -229,6 +243,7 @@ def refunds(request):
     else:
         return render_to_response('refunds_list.html')
 
+@login_required(login_url='/')
 def credits_tool(request):
     if request.method == 'POST':
 
@@ -243,6 +258,7 @@ def credits_tool(request):
 
         return handle_form(request, IdForm, custom_handler)
 
+@login_required(login_url='/')
 def orders_tool(request):
     if request.method == 'POST':
 
@@ -261,7 +277,7 @@ def orders_tool(request):
 
         return handle_form(request, IdForm, custom_handler)
 
-
+@login_required(login_url='/')
 def report(request):
     class MarketEntry():
         def __init__(self, name, sales, refunds, moves, orders):
@@ -309,3 +325,29 @@ def report(request):
 
     except MultiValueDictKeyError:
         return HttpResponseBadRequest('<h1>400 Bad Request</h1>')
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            login_ = form.cleaned_data['login']
+            password_ = form.cleaned_data['password']
+
+            user = auth.authenticate(username=login_, password=password_)
+
+            if user and user.is_active:
+                auth.login(request, user)
+                response = simplejson.dumps({'success': True})
+            else:
+                response = simplejson.dumps({'success': False, 'html': 'Неправильный логин или пароль!'})
+        else:
+            response = simplejson.dumps({'success': False, 'html': '<br/>'.join(map(lambda error_list: error_list.as_text(), form.errors.values()))})
+
+        if request.is_ajax():
+            return HttpResponse(response, content_type='application/javascript')
+
+    return HttpResponseRedirect('/')
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/')

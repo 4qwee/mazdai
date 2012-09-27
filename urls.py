@@ -30,5 +30,7 @@ urlpatterns = patterns('',
     url(r'^refills/$', 'mazdai_app.views.refills', name='refills'),
     url(r'^refunds/$', 'mazdai_app.views.refunds', name='refunds'),
     url(r'^report/$', 'mazdai_app.views.report', name='report'),
+    url(r'^login/$', 'mazdai_app.views.login', name='login'),
+    url(r'^logout/$', 'mazdai_app.views.logout', name='logout'),
     url(r'^$', 'mazdai_app.views.default'),
 )

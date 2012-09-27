@@ -5,31 +5,31 @@
  * Time: 10:54 PM
  */
 
+function createPopup($sales_popup, title)
+{
+    $sales_popup.dialog({
+        modal:true,
+        title:title,
+        show:{effect:'puff', duration:100},
+        hide:{effect:'puff', duration:100},
+        autoOpen:false
+    });
+}
+
+function createActionButton($row, $popup, label)
+{
+    var $button = $('<input/>').attr('type', 'button').val(label).addClass('myButton');
+    $button.click(function ()
+    {
+        var number = $row.find('td').first().html();
+        $popup.find('#id_position_id').val(number);
+        $popup.dialog('open');
+    });
+    return $button;
+}
+
 myJS = function ()
 {
-    function createPopup($sales_popup, title)
-    {
-        $sales_popup.dialog({
-            modal:true,
-            title:title,
-            show:{effect:'puff', duration:100},
-            hide:{effect:'puff', duration:100},
-            autoOpen:false
-        });
-    }
-
-    function createActionButton($row, $popup, label)
-    {
-        var $sale = $('<input/>').attr('type', 'button').val(label).addClass('myButton');
-        $sale.click(function ()
-        {
-            var number = $row.find('td').first().html();
-            $popup.find('#id_position_id').val(number);
-            $popup.dialog('open');
-        });
-        return $sale;
-    }
-
     function createActionBar($row, $toolbar)
     {
         $toolbar.append(createActionButton($row, $sales_popup, 'Продажа'));
@@ -77,6 +77,7 @@ myJS = function ()
                 {
                     $form.find('img.progress_image').hide();
                     $errors.noty({text:thrownError, type:'error'});
+                    $popup.find('.submit_button').removeAttr('disabled');
                 }
             })
         };
