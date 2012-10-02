@@ -65,7 +65,7 @@
     </tbody>
 </table>
 
-{% if is_authenticated%}
+{% if user.is_authenticated %}
     {% url sales as sales_url %}
     {% include 'popup_template.html' with popup_id='salesPopup' form_action=sales_url form=saleForm %}
 
@@ -84,18 +84,7 @@
     {% url refunds as refunds_url %}
     {% include 'popup_template.html' with popup_id='refundPopup' form_action=refunds_url form=refundForm %}
 
-    <br/>
-    <br/>
-
-    <div id='bottom_links'>
-        <a href='{% url sales %}'>Лист продаж</a>
-        <a href='{% url moves %}'>Лист расходов</a>
-        <a href='{% url credits %}'>Лист на руки</a>
-        <a href='{% url orders %}'>Лист заказов</a>
-        <a href='{% url refills %}'>Лист пополнений</a>
-        <a href='{% url refunds %}'>Лист возвратов</a>
-        <a href='{% url logout %}'>Выход</a>
-    </div>
+    {% include 'navigation-template.html' %}
 {% else %}
     {% url login as login_url %}
     {% include 'popup_template.html' with popup_id='loginPopup' form_action=login_url form=loginForm %}

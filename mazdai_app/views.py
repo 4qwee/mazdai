@@ -78,7 +78,7 @@ def default(request):
     return render_to_response('default.html',
         dict(saleForm=SaleForm(), markets=markets, non_sortable_columns=non_sortable_columns, moveForm=MoveForm(),
             creditForm=CreditForm(), orderForm=OrderForm(), refillForm=RefillForm(), refundForm=RefillForm(),
-            loginForm=LoginForm(), is_authenticated=request.user.is_authenticated(), user=request.user),
+            loginForm=LoginForm()),
         RequestContext(request))
 
 #post handlers & lists

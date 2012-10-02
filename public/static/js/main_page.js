@@ -111,8 +111,6 @@ myJS = function ()
         $popup.find('form').submit(createSubmitHandler($myTable, $popup, $toolbar));
     });
 
-    $('#bottom_links').buttonset();
-
     $("#positions-table").find("tbody tr").live('click', function (e)
     {
         var $this = $(this);

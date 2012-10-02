@@ -1,0 +1,30 @@
+{% if user.is_authenticated%}
+    <ul id="navigation">
+        <li class="home"><a href="{% url default %}" title="Лист позиций"></a></li>
+        <li class="sales"><a href="{% url sales %}" title="Лист продаж"></a></li>
+        <li class="moves"><a href="{% url moves %}" title="Лист расходов"></a></li>
+        <li class="credits"><a href="{% url credits %}" title="Лист на руки"></a></li>
+        <li class="orders"><a href="{% url orders %}" title="Лист заказов"></a></li>
+        <li class="refills"><a href="{% url refills %}" title="Лист пополнений"></a></li>
+        <li class="refunds"><a href="{% url refunds %}" title="Лист возвратов"></a></li>
+        <li class="logout"><a href="{% url logout %}" title="Выход"></a></li>
+    </ul>
+{% endif %}
+
+<script type="text/javascript">
+    $('document').ready(function()
+    {
+        var $navigation = $('#navigation');
+
+        $navigation.find('a').css('marginLeft', '-85px')
+
+        $navigation.find('> li').hover(
+                function () {
+                    $('a',$(this)).stop().animate({'marginLeft':'-2px'},200);
+                },
+                function () {
+                    $('a',$(this)).stop().animate({'marginLeft':'-85px'},200);
+                }
+        );
+    });
+</script>
