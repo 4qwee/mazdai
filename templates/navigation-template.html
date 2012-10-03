@@ -9,7 +9,6 @@
         <li class="refunds"><a href="{% url refunds %}" title="Лист возвратов"></a></li>
         <li class="logout"><a href="{% url logout %}" title="Выход"></a></li>
     </ul>
-{% endif %}
 
 <script type="text/javascript">
     $('document').ready(function()
@@ -28,3 +27,7 @@
         );
     });
 </script>
+{% else %}
+    <br/>
+    kvg
+{% endif %}

@@ -6,7 +6,7 @@ ul#navigation {
     position: fixed;
     margin: 0px;
     padding: 0px;
-    top: 10px;
+    bottom: 10px;
     left: 0px;
     list-style: none;
     z-index:9999;

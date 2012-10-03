@@ -120,7 +120,7 @@ def sales(request):
 
         return handle_form(request, SaleForm, custom_handler)
     else:
-        return render_to_response('sales_list.html')
+        return render_to_response('sales_list.html', RequestContext(request))
 
 @login_required(login_url='/')
 def moves(request):
@@ -151,7 +151,7 @@ def moves(request):
         return handle_form(request, MoveForm, custom_handler)
 
     else:
-        return render_to_response('moves_list.html')
+        return render_to_response('moves_list.html', RequestContext(request))
 
 @login_required(login_url='/')
 def credits(request):
@@ -218,7 +218,7 @@ def refills(request):
 
         return handle_form(request, RefillForm, custom_handler)
     else:
-        return render_to_response('refills_list.html')
+        return render_to_response('refills_list.html', RequestContext(request))
 
 @login_required(login_url='/')
 def refunds(request):
@@ -241,7 +241,7 @@ def refunds(request):
 
         return handle_form(request, RefundForm, custom_handler)
     else:
-        return render_to_response('refunds_list.html')
+        return render_to_response('refunds_list.html', RequestContext(request))
 
 @login_required(login_url='/')
 def credits_tool(request):
