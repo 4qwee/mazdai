@@ -72,6 +72,6 @@ def get_datatables_records(request, querySet, columnIndexNameMap, searchableColu
         sEcho = '0' #default value
     else:
         sEcho = request.GET['sEcho'] #this is required by datatables 
-    jstonString = render_to_string(jsonTemplatePath, locals())
+    jsonString = render_to_string(jsonTemplatePath, locals())
 
-    return HttpResponse(jstonString, mimetype="application/javascript")
+    return HttpResponse(jsonString, mimetype="application/javascript")

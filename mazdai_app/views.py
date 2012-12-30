@@ -161,7 +161,7 @@ def credits(request):
             position_id_ = form.cleaned_data['position_id']
             market_id_ = form.cleaned_data['market_id']
             count_ = form.cleaned_data['count']
-            comment_ = form.cleaned_data['comment']
+            comment_ = form.cleaned_data['comment'].replace('\r\n', ' ')
 
             position = Position.objects.get(id=position_id_)
             market = Market.objects.get(id=market_id_)
