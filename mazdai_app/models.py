@@ -52,7 +52,7 @@ class GoodsQuantity(models.Model):
     quantity = models.IntegerField(verbose_name='Количество')
 
     def __unicode__(self):
-        return '%s(%s) - %d' % (self.position, self.market.name, self.quantity)
+        return '%s(%s) - %d' % (unicode(self.position), unicode(self.market.name), self.quantity)
 
     class Meta:
         verbose_name = 'Количество товара'
