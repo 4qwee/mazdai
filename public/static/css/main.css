@@ -58,3 +58,9 @@ ul#navigation .refunds a    {
 ul#navigation .logout a    {
     background-image: url(images/nav-logout.png);
 }
+
+tr.category {
+    background-color: #808080;
+    font-weight: bold;
+    color: #ffffff;
+}

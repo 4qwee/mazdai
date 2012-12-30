@@ -115,7 +115,8 @@ myJS = function ()
     {
         var $this = $(this);
 
-        if ($this.find('td').first().hasClass('dataTables_empty')) //don't select header
+        var $tds = $this.find('td');
+        if ($tds.length == 1 || $tds.first().hasClass('dataTables_empty')) //don't select header and category
             return;
 
         if ($this.hasClass('row_selected'))

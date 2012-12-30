@@ -25,7 +25,32 @@
                 "bScrollCollapse": true,
                 "bJQueryUI": true,
                 "sDom": '<"toolbar">frtip',
-                "sScrollY": $(window).height(),
+                "fnDrawCallback":function(oSettings)
+                {
+                    if ( oSettings.aiDisplay.length == 0 )
+                        return;
+
+                    var nTrs = $('#positions-table tbody tr');
+                    var iColspan = nTrs[0].getElementsByTagName('td').length;
+                    var sLastGroup = "";
+                    for ( var i=0 ; i<nTrs.length ; i++ )
+                    {
+                        var iDisplayIndex = oSettings._iDisplayStart + i;
+                        var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[1].split(' ')[0];
+                        if ( sGroup != sLastGroup )
+                        {
+                            var nGroup = document.createElement( 'tr' );
+                            nGroup.setAttribute('class', 'category');
+                            var nCell = document.createElement( 'td' );
+                            nCell.colSpan = iColspan;
+                            nCell.className = "group";
+                            nCell.innerHTML = sGroup;
+                            nGroup.appendChild( nCell );
+                            nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+                            sLastGroup = sGroup;
+                        }
+                    }
+                },
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [ {{ non_sortable_columns }} ] }
                 ]
@@ -38,7 +63,7 @@
     </script>
 </head>
 <body>
-<table id="positions-table">
+<table id="positions-table" style="width: 100%">
     <thead>
     <tr>
         <th width="50px">
